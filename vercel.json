@@ -1,5 +1,6 @@
 {
     "version": 2,
+    "name": "romulomonte",
     "builds": [
       {
         "src": "index.html",
@@ -8,18 +9,15 @@
     ],
     "routes": [
       {
+        "src": "/",
+        "dest": "/index.html"
+      },
+      {
         "src": "/(.*)",
         "dest": "/index.html"
       }
     ],
-    "regions": ["gru1"]
+    "regions": ["gru1"],
+    "cleanUrls": true,
+    "trailingSlash": false
   }
-  ```
-  
-  ### 2. Verificar se o `index.html` está na raiz
-  
-  Certifique-se que a estrutura está assim:
-  ```
-  seu-projeto/
-  ├── index.html
-  └── vercel.json
