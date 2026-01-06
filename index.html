@@ -6,9 +6,12 @@
     <meta name="description" content="Rômulo Monte - Senior Product Designer especializado em UX, UI e experiência digital">
     <meta name="author" content="Rômulo Monte">
     <title>Rômulo Monte - Senior Product Designer</title>
-
+    
+    <!-- Favicons -->
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
-    <link rel="apple-touch-icon" href="/logo.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/logo.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/logo.png">
+    <meta name="theme-color" content="#0F172A">
     
     <style>
         /* ========== RESET E VARIÁVEIS ========== */
@@ -139,6 +142,31 @@
             position: relative;
             z-index: 1;
             text-align: center;
+        }
+
+        .hero-logo {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto var(--spacing-xl) auto;
+            animation: fadeInScale 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .hero-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: drop-shadow(0 10px 20px rgba(59, 130, 246, 0.3));
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
 
         .status-badge {
@@ -459,6 +487,11 @@
                 padding: var(--spacing-2xl) 0;
             }
 
+            .hero-logo {
+                width: 90px;
+                height: 90px;
+            }
+
             .about-content {
                 padding: var(--spacing-lg);
             }
@@ -497,6 +530,9 @@
     <section class="hero">
         <div class="container">
             <div class="hero-content">
+                <div class="hero-logo">
+                    <img src="/logo.png" alt="Rômulo Monte Logo" />
+                </div>
                 <div class="status-badge fade-in">
                     <span class="status-dot"></span>
                     Em Construção
