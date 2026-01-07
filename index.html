@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Rômulo Monte - Senior Product Designer especializado em UX, UI e experiência digital">
+    <meta name="description" content="Rômulo Monte - Estrategista de crescimento especializado em criar sistemas previsíveis para negócios digitais">
     <meta name="author" content="Rômulo Monte">
-    <title>Rômulo Monte - Senior Product Designer</title>
+    <title>Rômulo Monte - Estrategista de Crescimento & Sistemas Digitais</title>
     
     <!-- Favicons -->
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
     <link rel="icon" type="image/png" sizes="32x32" href="/logo.png">
     <link rel="apple-touch-icon" sizes="180x180" href="/logo.png">
-    <meta name="theme-color" content="#0F172A">
+    <meta name="theme-color" content="#0A0E27">
     
     <style>
-        /* ========== RESET E VARIÁVEIS ========== */
+        /* ========== RESET & FOUNDATION ========== */
         * {
             margin: 0;
             padding: 0;
@@ -22,23 +22,18 @@
         }
 
         :root {
-            /* Paleta sofisticada com contraste refinado */
-            --color-primary: #0F172A;
-            --color-secondary: #1E293B;
-            --color-accent: #3B82F6;
-            --color-accent-hover: #2563EB;
+            --color-bg: #0A0E27;
+            --color-surface: #151B35;
+            --color-surface-elevated: #1E2744;
+            --color-accent: #4F46E5;
+            --color-accent-light: #6366F1;
             --color-text: #F8FAFC;
             --color-text-secondary: #CBD5E1;
-            --color-text-dim: #94A3B8;
-            --color-bg: #020617;
-            --color-card: #0F172A;
-            --color-border: rgba(148, 163, 184, 0.1);
-            --color-border-hover: rgba(59, 130, 246, 0.3);
+            --color-text-muted: #94A3B8;
+            --color-border: rgba(148, 163, 184, 0.12);
             
-            /* Tipografia refinada */
-            --font-primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            --font-primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', Roboto, sans-serif;
             
-            /* Sistema de espaçamento preciso */
             --spacing-xs: 0.5rem;
             --spacing-sm: 1rem;
             --spacing-md: 1.5rem;
@@ -47,19 +42,15 @@
             --spacing-2xl: 4rem;
             --spacing-3xl: 6rem;
             
-            /* Sistema de transições consistente */
-            --transition-fast: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-            --transition-base: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-            --transition-slow: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-            
-            /* Sombras com profundidade */
-            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
-            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
-            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.6);
+            --transition: cubic-bezier(0.4, 0, 0.2, 1);
+            --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.6);
+            --shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
         }
 
-        /* ========== BASE ========== */
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
             font-family: var(--font-primary);
             background: var(--color-bg);
@@ -67,172 +58,240 @@
             line-height: 1.6;
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
         }
 
-        /* ========== CONTAINER GERAL ========== */
+        /* ========== LAYOUT SYSTEM ========== */
         .container {
-            max-width: 1100px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 0 var(--spacing-md);
         }
 
-        /* ========== ANIMAÇÕES SOFISTICADAS ========== */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        .container-wide {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 var(--spacing-md);
         }
 
-        @keyframes scaleIn {
-            from {
-                opacity: 0;
-                transform: scale(0.95);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
+        /* ========== NAVIGATION ========== */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            background: rgba(10, 14, 39, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--color-border);
+            transition: all 0.3s var(--transition);
         }
 
-        @keyframes pulse {
-            0%, 100% { 
-                opacity: 1;
-                transform: scale(1);
-            }
-            50% { 
-                opacity: 0.6;
-                transform: scale(0.95);
-            }
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: var(--spacing-md) var(--spacing-md);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .fade-in {
-            animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        .nav-logo {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--color-text);
+            text-decoration: none;
+            letter-spacing: -0.02em;
         }
 
-        /* ========== HERO SECTION ========== */
+        .nav-menu {
+            display: flex;
+            gap: var(--spacing-lg);
+            list-style: none;
+        }
+
+        .nav-link {
+            color: var(--color-text-secondary);
+            text-decoration: none;
+            font-size: 0.9375rem;
+            font-weight: 500;
+            transition: color 0.2s var(--transition);
+        }
+
+        .nav-link:hover {
+            color: var(--color-accent-light);
+        }
+
+        .nav-cta {
+            padding: 0.625rem 1.5rem;
+            background: var(--color-accent);
+            color: white;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9375rem;
+            transition: all 0.2s var(--transition);
+        }
+
+        .nav-cta:hover {
+            background: var(--color-accent-light);
+            transform: translateY(-1px);
+        }
+
+        /* ========== HERO SECTION (COM BACKGROUND) ========== */
         .hero {
             min-height: 100vh;
             display: flex;
-            flex-direction: column;
-            justify-content: center;
-            padding: var(--spacing-3xl) 0;
+            align-items: center;
+            padding-top: 80px;
             position: relative;
+            overflow: hidden;
         }
 
         .hero::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100%;
-            max-width: 800px;
-            height: 400px;
-            background: radial-gradient(ellipse at center, rgba(59, 130, 246, 0.08) 0%, transparent 70%);
-            pointer-events: none;
+            inset: 0;
+            background-image: url('/assets/H5C9PEz6HOH8XJZgEi1YXASUGso.avif');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.15;
+            z-index: 0;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, 
+                rgba(10, 14, 39, 0.95) 0%, 
+                rgba(21, 27, 53, 0.85) 50%, 
+                rgba(10, 14, 39, 0.95) 100%);
+            z-index: 1;
         }
 
         .hero-content {
             position: relative;
-            z-index: 1;
+            z-index: 2;
+            max-width: 900px;
             text-align: center;
+            margin: 0 auto;
         }
 
-        .hero-logo {
-            width: 120px;
-            height: 120px;
-            margin: 0 auto var(--spacing-xl) auto;
-            animation: fadeInScale 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-        }
-
-        .hero-logo img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-            filter: drop-shadow(0 10px 20px rgba(59, 130, 246, 0.3));
-        }
-
-        @keyframes fadeInScale {
-            from {
-                opacity: 0;
-                transform: scale(0.8);
-            }
-            to {
-                opacity: 1;
-                transform: scale(1);
-            }
-        }
-
-        .status-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.625rem;
-            background: var(--color-secondary);
-            padding: 0.625rem 1.25rem;
+        .hero-label {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            background: rgba(79, 70, 229, 0.15);
+            color: var(--color-accent-light);
             border-radius: 100px;
-            font-size: 0.8125rem;
-            font-weight: 500;
-            color: var(--color-accent);
-            margin-bottom: var(--spacing-xl);
-            border: 1px solid var(--color-border-hover);
-            animation-delay: 0s;
-            letter-spacing: 0.01em;
-        }
-
-        .status-dot {
-            width: 6px;
-            height: 6px;
-            background: var(--color-accent);
-            border-radius: 50%;
-            animation: pulse 2s ease-in-out infinite;
+            font-size: 0.875rem;
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin-bottom: var(--spacing-md);
+            border: 1px solid rgba(79, 70, 229, 0.3);
         }
 
         .hero h1 {
-            font-size: clamp(3rem, 8vw, 5rem);
-            font-weight: 700;
-            margin-bottom: var(--spacing-md);
-            letter-spacing: -0.03em;
+            font-size: clamp(2.75rem, 7vw, 4.5rem);
+            font-weight: 800;
             line-height: 1.1;
-            background: linear-gradient(135deg, #FFFFFF 0%, var(--color-text-secondary) 100%);
+            letter-spacing: -0.03em;
+            margin-bottom: var(--spacing-md);
+            background: linear-gradient(135deg, #FFFFFF 0%, #CBD5E1 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
-            animation-delay: 0.1s;
         }
 
-        .hero h2 {
+        .hero-subtitle {
             font-size: clamp(1.125rem, 2.5vw, 1.5rem);
-            font-weight: 400;
             color: var(--color-text-secondary);
+            line-height: 1.6;
             margin-bottom: var(--spacing-xl);
-            letter-spacing: -0.01em;
-            animation-delay: 0.2s;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
         }
 
-        .hero p {
-            font-size: clamp(1rem, 2vw, 1.125rem);
-            color: var(--color-text-dim);
-            max-width: 640px;
-            margin: 0 auto;
-            line-height: 1.7;
-            animation-delay: 0.3s;
+        .hero-cta-group {
+            display: flex;
+            gap: var(--spacing-md);
+            flex-wrap: wrap;
+            justify-content: center;
         }
 
-        /* ========== SEÇÃO SOBRE ========== */
+        .btn-primary {
+            padding: 1rem 2rem;
+            background: var(--color-accent);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s var(--transition);
+        }
+
+        .btn-primary:hover {
+            background: var(--color-accent-light);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-secondary {
+            padding: 1rem 2rem;
+            background: transparent;
+            color: var(--color-text);
+            border: 2px solid var(--color-border);
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s var(--transition);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--color-accent);
+            color: var(--color-accent-light);
+            transform: translateY(-2px);
+        }
+
+        /* ========== ABOUT SECTION ========== */
         .about {
             padding: var(--spacing-3xl) 0;
-            background: linear-gradient(180deg, var(--color-bg) 0%, var(--color-primary) 100%);
+            background: var(--color-surface);
         }
 
-        .section-header {
-            text-align: center;
-            margin-bottom: var(--spacing-xl);
+        .about-grid {
+            display: grid;
+            grid-template-columns: 400px 1fr;
+            gap: var(--spacing-3xl);
+            align-items: center;
+        }
+
+        .about-image {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow-xl);
+        }
+
+        .about-image img {
+            width: 100%;
+            height: 500px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .about-content {
+            max-width: 650px;
         }
 
         .section-label {
@@ -241,410 +300,521 @@
             font-weight: 600;
             letter-spacing: 0.1em;
             text-transform: uppercase;
-            color: var(--color-accent);
+            color: var(--color-accent-light);
             margin-bottom: var(--spacing-sm);
         }
 
         .section-title {
-            font-size: clamp(2rem, 5vw, 2.75rem);
+            font-size: clamp(2rem, 4vw, 2.75rem);
             font-weight: 700;
             letter-spacing: -0.02em;
-            color: var(--color-text);
+            margin-bottom: var(--spacing-md);
+            line-height: 1.2;
         }
 
-        .about-content {
-            background: var(--color-card);
-            padding: var(--spacing-xl);
-            border-radius: 20px;
-            border: 1px solid var(--color-border);
-            box-shadow: var(--shadow-lg);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .about-content::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--color-accent), transparent);
-        }
-
-        .about-content p {
-            color: var(--color-text-secondary);
+        .about-text {
             font-size: 1.0625rem;
+            color: var(--color-text-secondary);
             line-height: 1.8;
             margin-bottom: var(--spacing-md);
         }
 
-        .about-content p:last-child {
-            margin-bottom: 0;
+        .about-highlight {
+            padding: var(--spacing-md);
+            background: rgba(79, 70, 229, 0.08);
+            border-left: 3px solid var(--color-accent);
+            border-radius: 8px;
+            margin-top: var(--spacing-lg);
         }
 
-        /* ========== SEÇÃO DE LINKS ========== */
-        .links {
+        .about-highlight p {
+            color: var(--color-text);
+            font-weight: 500;
+            font-size: 1.0625rem;
+        }
+
+        /* ========== SERVICES SECTION ========== */
+        .services {
             padding: var(--spacing-3xl) 0;
-            background: var(--color-primary);
         }
 
-        .links-grid {
+        .services-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto var(--spacing-2xl) auto;
+        }
+
+        .services-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: var(--spacing-md);
-            margin-top: var(--spacing-xl);
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: var(--spacing-xl);
         }
 
-        .link-card {
-            background: var(--color-card);
-            padding: var(--spacing-xl) var(--spacing-lg);
+        .service-card {
+            background: var(--color-surface);
+            padding: var(--spacing-xl);
             border-radius: 16px;
             border: 1px solid var(--color-border);
-            text-decoration: none;
-            color: var(--color-text);
-            transition: all var(--transition-base);
-            display: flex;
-            flex-direction: column;
+            transition: all 0.3s var(--transition);
+        }
+
+        .service-card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(79, 70, 229, 0.3);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .service-number {
+            display: inline-flex;
             align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            background: rgba(79, 70, 229, 0.15);
+            color: var(--color-accent-light);
+            border-radius: 12px;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .service-title {
+            font-size: 1.375rem;
+            font-weight: 700;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .service-description {
+            color: var(--color-text-secondary);
+            line-height: 1.7;
+        }
+
+        .services-footer {
             text-align: center;
-            gap: var(--spacing-md);
+            margin-top: var(--spacing-2xl);
+            padding-top: var(--spacing-xl);
+            border-top: 1px solid var(--color-border);
+        }
+
+        .services-footer p {
+            font-size: 1.125rem;
+            color: var(--color-text);
+            font-weight: 500;
+            font-style: italic;
+        }
+
+        /* ========== METHOD SECTION ========== */
+        .method {
+            padding: var(--spacing-3xl) 0;
+            background: var(--color-surface);
+        }
+
+        .method-header {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto var(--spacing-2xl) auto;
+        }
+
+        .method-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--spacing-xl);
+        }
+
+        .method-card {
+            background: var(--color-surface-elevated);
+            padding: var(--spacing-xl);
+            border-radius: 16px;
+            border: 1px solid var(--color-border);
+            transition: all 0.3s var(--transition);
             position: relative;
             overflow: hidden;
         }
 
-        .link-card::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, rgba(59, 130, 246, 0) 0%, rgba(59, 130, 246, 0.05) 100%);
-            opacity: 0;
-            transition: opacity var(--transition-base);
-        }
-
-        .link-card:hover {
-            transform: translateY(-6px);
-            border-color: var(--color-border-hover);
-            box-shadow: var(--shadow-xl);
-        }
-
-        .link-card:hover::before {
-            opacity: 1;
-        }
-
-        .link-card:active {
-            transform: translateY(-2px);
-        }
-
-        .link-icon {
-            width: 48px;
-            height: 48px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: rgba(59, 130, 246, 0.1);
-            border-radius: 12px;
-            transition: all var(--transition-base);
-            position: relative;
-            z-index: 1;
-        }
-
-        .link-icon svg {
-            width: 24px;
-            height: 24px;
-            fill: var(--color-accent);
-            transition: all var(--transition-base);
-        }
-
-        .link-card:hover .link-icon {
-            background: rgba(59, 130, 246, 0.2);
-            transform: scale(1.1);
-        }
-
-        .link-card:hover .link-icon svg {
-            fill: var(--color-accent-hover);
-        }
-
-        .link-title {
-            font-size: 1.125rem;
-            font-weight: 600;
-            position: relative;
-            z-index: 1;
-            letter-spacing: -0.01em;
-        }
-
-        .link-subtitle {
-            font-size: 0.9375rem;
-            color: var(--color-text-dim);
-            position: relative;
-            z-index: 1;
-        }
-
-        /* ========== SEÇÃO DE CONTATO ========== */
-        .contact {
-            padding: var(--spacing-3xl) 0;
-            background: linear-gradient(180deg, var(--color-primary) 0%, var(--color-bg) 100%);
-        }
-
-        .contact-methods {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: var(--spacing-md);
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .contact-item {
-            background: var(--color-card);
-            padding: var(--spacing-xl);
-            border-radius: 16px;
-            border: 1px solid var(--color-border);
-            display: flex;
-            align-items: center;
-            gap: var(--spacing-md);
-            transition: all var(--transition-base);
-            box-shadow: var(--shadow-sm);
-        }
-
-        .contact-item:hover {
-            border-color: var(--color-border-hover);
+        .method-card:hover {
+            transform: translateY(-4px);
             box-shadow: var(--shadow-lg);
-            transform: translateY(-2px);
+            border-color: rgba(79, 70, 229, 0.3);
         }
 
-        .contact-icon {
+        .method-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .method-number {
+            position: absolute;
+            top: var(--spacing-md);
+            right: var(--spacing-md);
             width: 48px;
             height: 48px;
-            min-width: 48px;
+            background: var(--color-accent);
+            border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: rgba(59, 130, 246, 0.1);
-            border-radius: 12px;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: white;
+            box-shadow: var(--shadow-lg);
         }
 
-        .contact-icon svg {
-            width: 24px;
-            height: 24px;
-            stroke: var(--color-accent);
-            stroke-width: 2;
-            fill: none;
+        .method-title {
+            font-size: 1.375rem;
+            font-weight: 700;
+            margin-bottom: var(--spacing-sm);
         }
 
-        .contact-details {
-            flex: 1;
+        .method-description {
+            color: var(--color-text-secondary);
+            line-height: 1.7;
         }
 
-        .contact-label {
-            font-size: 0.8125rem;
-            color: var(--color-text-dim);
-            display: block;
-            margin-bottom: 0.375rem;
-            font-weight: 500;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
+        /* ========== CTA SECTION ========== */
+        .cta-section {
+            padding: var(--spacing-3xl) 0;
         }
 
-        .contact-value {
-            font-size: 1.0625rem;
-            font-weight: 500;
-            color: var(--color-text);
-        }
-
-        .contact-value a {
-            color: var(--color-accent);
-            text-decoration: none;
-            transition: color var(--transition-fast);
-        }
-
-        .contact-value a:hover {
-            color: var(--color-accent-hover);
-        }
-
-        /* ========== RODAPÉ ========== */
-        .footer {
-            padding: var(--spacing-xl) 0;
+        .cta-container {
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.15) 0%, rgba(99, 102, 241, 0.05) 100%);
+            border: 1px solid rgba(79, 70, 229, 0.2);
+            border-radius: 24px;
+            padding: var(--spacing-3xl) var(--spacing-xl);
             text-align: center;
+        }
+
+        .cta-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 700;
+            margin-bottom: var(--spacing-md);
+            line-height: 1.2;
+        }
+
+        .cta-description {
+            font-size: 1.125rem;
+            color: var(--color-text-secondary);
+            margin-bottom: var(--spacing-xl);
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* ========== FOOTER ========== */
+        .footer {
+            padding: var(--spacing-2xl) 0 var(--spacing-lg) 0;
             border-top: 1px solid var(--color-border);
-            background: var(--color-bg);
+            background: var(--color-surface);
         }
 
-        .footer p {
-            color: var(--color-text-dim);
+        .footer-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: var(--spacing-xl);
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .footer-column h3 {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .footer-links a {
+            color: var(--color-text-secondary);
+            text-decoration: none;
+            font-size: 0.9375rem;
+            transition: color 0.2s var(--transition);
+        }
+
+        .footer-links a:hover {
+            color: var(--color-accent-light);
+        }
+
+        .footer-bottom {
+            padding-top: var(--spacing-lg);
+            border-top: 1px solid var(--color-border);
+            text-align: center;
+            color: var(--color-text-muted);
             font-size: 0.875rem;
-            letter-spacing: 0.01em;
         }
 
-        /* ========== RESPONSIVO ========== */
-        @media (max-width: 768px) {
+        /* ========== RESPONSIVE ========== */
+        @media (max-width: 968px) {
+            .about-grid {
+                grid-template-columns: 1fr;
+                gap: var(--spacing-xl);
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                gap: var(--spacing-lg);
+            }
+
+            .nav-menu {
+                display: none;
+            }
+        }
+
+        @media (max-width: 640px) {
             :root {
+                --spacing-xl: 2rem;
                 --spacing-2xl: 3rem;
                 --spacing-3xl: 4rem;
             }
 
-            .hero {
-                min-height: 85vh;
-                padding: var(--spacing-2xl) 0;
+            .hero-cta-group {
+                flex-direction: column;
             }
 
-            .hero-logo {
-                width: 90px;
-                height: 90px;
+            .btn-primary,
+            .btn-secondary {
+                width: 100%;
+                justify-content: center;
             }
 
-            .about-content {
-                padding: var(--spacing-lg);
-            }
-
-            .links-grid {
+            .services-grid,
+            .method-grid {
                 grid-template-columns: 1fr;
-            }
-
-            .contact-methods {
-                grid-template-columns: 1fr;
-            }
-
-            .contact-item {
-                flex-direction: row;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .container {
-                padding: 0 var(--spacing-sm);
-            }
-
-            .about-content {
-                padding: var(--spacing-md);
-            }
-
-            .about-content p {
-                font-size: 1rem;
             }
         }
     </style>
 </head>
 <body>
     
-    <!-- ========== HERO SECTION ========== -->
+    <!-- ========== NAVIGATION ========== -->
+    <nav class="nav">
+        <div class="nav-container">
+            <a href="#" class="nav-logo">Rômulo Monte</a>
+            <ul class="nav-menu">
+                <li><a href="#sobre" class="nav-link">Sobre</a></li>
+                <li><a href="#servicos" class="nav-link">Serviços</a></li>
+                <li><a href="#metodo" class="nav-link">Método</a></li>
+                <li><a href="#contato" class="nav-cta">Contato</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- ========== HERO ========== -->
     <section class="hero">
         <div class="container">
             <div class="hero-content">
-                <div class="hero-logo">
-                    <img src="/logo.png" alt="Rômulo Monte Logo" />
+                <span class="hero-label">Estrategista de Crescimento & Sistemas Digitais</span>
+                <h1>Transformo operações em sistemas previsíveis de crescimento</h1>
+                <p class="hero-subtitle">
+                    Estruturo captação, conversão e retenção para negócios de serviço. 
+                    Não faço ações isoladas de marketing — construo processos que geram resultado sustentável.
+                </p>
+                <div class="hero-cta-group">
+                    <a href="#servicos" class="btn-primary">
+                        Como eu trabalho
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </a>
+                    <a href="#contato" class="btn-secondary">Conversar sobre um projeto</a>
                 </div>
-                <div class="status-badge fade-in">
-                    <span class="status-dot"></span>
-                    Em Construção
-                </div>
-                <h1 class="fade-in">Rômulo Monte</h1>
-                <h2 class="fade-in">Consultor Sênior em Marketing, Crescimento e Operações</h2>
-                <p class="fade-in">Este site está em construção. Enquanto isso, você pode conhecer meu trabalho, meu portfólio e entrar em contato pelos canais abaixo.</p>
             </div>
         </div>
     </section>
 
-    <!-- ========== SEÇÃO SOBRE ========== -->
+    <!-- ========== ABOUT ========== -->
     <section class="about" id="sobre">
         <div class="container">
-            <div class="section-header">
-                <span class="section-label">Sobre</span>
-                <h2 class="section-title">Experiência & Especialização</h2>
-            </div>
-            <div class="about-content">
-                <p>Sou Rômulo Monte, Senior Product Designer especializado em UX, UI e experiência digital, com atuação em produtos digitais de ponta a ponta. Trabalho unindo pesquisa, arquitetura da informação, design de interfaces e prototipação para criar soluções claras, escaláveis e orientadas a impacto.</p>
-
-                <p>Tenho experiência em projetos complexos, como a plataforma internacional de cash management do Bradesco, além do desenvolvimento de produtos próprios como o Aquitio e o FaseUp. Nos últimos anos, aprofundei minha atuação com inteligência artificial aplicada ao design, acelerando discovery, validação e evolução de produtos digitais.</p>
-
-                <p>Meu foco é transformar complexidade em experiências simples, funcionais e alinhadas aos objetivos de negócio.</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- ========== SEÇÃO DE LINKS ========== -->
-    <section class="links" id="links">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-label">Portfólio</span>
-                <h2 class="section-title">Presença Digital</h2>
-            </div>
-            <div class="links-grid">
-                <a href="https://www.behance.net/romulo-monte" target="_blank" rel="noopener noreferrer" class="link-card">
-                    <div class="link-icon">
-                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M22 7h-7v-2h7v2zm1.726 10c-.442 1.297-2.029 3-5.101 3-3.074 0-5.564-1.729-5.564-5.675 0-3.91 2.325-5.92 5.466-5.92 3.082 0 4.964 1.782 5.375 4.426.078.506.109 1.188.095 2.14h-8.027c.13 3.211 3.483 3.312 4.588 2.029h3.168zm-7.686-4h4.965c-.105-1.547-1.136-2.219-2.477-2.219-1.466 0-2.277.768-2.488 2.219zm-9.574 6.988h-6.466v-14.967h6.953c5.476.081 5.58 5.444 2.72 6.906 3.461 1.26 3.577 8.061-3.207 8.061zm-3.466-8.988h3.584c2.508 0 2.906-3-.312-3h-3.272v3zm3.391 3h-3.391v3.016h3.341c3.055 0 2.868-3.016.05-3.016z"/>
-                        </svg>
-                    </div>
-                    <div class="link-title">Portfólio</div>
-                    <div class="link-subtitle">Behance</div>
-                </a>
-
-                <a href="https://www.linkedin.com/in/romulo-monte-60477033/" target="_blank" rel="noopener noreferrer" class="link-card">
-                    <div class="link-icon">
-                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
-                        </svg>
-                    </div>
-                    <div class="link-title">LinkedIn</div>
-                    <div class="link-subtitle">Perfil Profissional</div>
-                </a>
-
-                <a href="https://www.instagram.com/montedigital/" target="_blank" rel="noopener noreferrer" class="link-card">
-                    <div class="link-icon">
-                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
-                        </svg>
-                    </div>
-                    <div class="link-title">Instagram</div>
-                    <div class="link-subtitle">@montedigital</div>
-                </a>
-            </div>
-        </div>
-    </section>
-
-    <!-- ========== SEÇÃO DE CONTATO ========== -->
-    <section class="contact" id="contato">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-label">Contato</span>
-                <h2 class="section-title">Vamos Conversar</h2>
-            </div>
-            <div class="contact-methods">
-                <div class="contact-item">
-                    <div class="contact-icon">
-                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M3 5a2 2 0 0 1 2-2h3.28a1 1 0 0 1 .948.684l1.498 4.493a1 1 0 0 1-.502 1.21l-2.257 1.13a11.042 11.042 0 0 0 5.516 5.516l1.13-2.257a1 1 0 0 1 1.21-.502l4.493 1.498a1 1 0 0 1 .684.949V19a2 2 0 0 1-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
-                        </svg>
-                    </div>
-                    <div class="contact-details">
-                        <span class="contact-label">WhatsApp / Telefone</span>
-                        <div class="contact-value">
-                            <a href="https://wa.me/5582993869090" target="_blank" rel="noopener noreferrer">+55 82 99386-9090</a>
-                        </div>
+            <div class="about-grid">
+                <div class="about-image">
+                    <img src="/assets/foto-romulo-monte.jpg" alt="Rômulo Monte" />
+                </div>
+                <div class="about-content">
+                    <span class="section-label">Sobre mim</span>
+                    <h2 class="section-title">Estrategista de crescimento com background em UX, pesquisa e produtos digitais</h2>
+                    <p class="about-text">
+                        Ao longo dos últimos anos, atuei em projetos complexos em tecnologia, finanças e serviços, 
+                        onde ficou claro que tráfego sem estrutura gera desperdício.
+                    </p>
+                    <p class="about-text">
+                        Hoje ajudo negócios de serviço e operações locais a organizarem sua jornada de captação, 
+                        atendimento e retenção, criando sistemas previsíveis de crescimento — não ações isoladas de marketing.
+                    </p>
+                    <p class="about-text">
+                        Meu trabalho une diagnóstico estratégico, desenho de experiência e execução orientada a dados.
+                    </p>
+                    <div class="about-highlight">
+                        <p>
+                            Meu diferencial é unir UX, marketing e estratégia em um único método de crescimento orientado a resultado.
+                        </p>
                     </div>
                 </div>
+            </div>
+        </div>
+    </section>
 
-                <div class="contact-item">
-                    <div class="contact-icon">
-                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <!-- ========== SERVICES ========== -->
+    <section class="services" id="servicos">
+        <div class="container">
+            <div class="services-header">
+                <span class="section-label">O que eu faço</span>
+                <h2 class="section-title">Serviços focados em resultado</h2>
+                <p class="about-text">
+                    Não trabalho com entregas isoladas. Estruturo sistemas completos de captação, 
+                    conversão e retenção para negócios de serviço.
+                </p>
+            </div>
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-number">1</div>
+                    <h3 class="service-title">Diagnóstico e Estratégia</h3>
+                    <p class="service-description">
+                        Análise profunda do negócio, público e jornada atual. 
+                        Identificação de gargalos de captação, conversão e retenção que impedem o crescimento.
+                    </p>
+                </div>
+                <div class="service-card">
+                    <div class="service-number">2</div>
+                    <h3 class="service-title">Estruturação do Sistema</h3>
+                    <p class="service-description">
+                        Desenho completo de funil, oferta, experiência e atendimento. 
+                        Criação de páginas, mensagens, fluxos e automações que sustentam o crescimento.
+                    </p>
+                </div>
+                <div class="service-card">
+                    <div class="service-number">3</div>
+                    <h3 class="service-title">Aquisição e Otimização</h3>
+                    <p class="service-description">
+                        Tráfego pago com testes controlados e ajustes contínuos. 
+                        Foco em previsibilidade e escalabilidade, não em volume sem retorno.
+                    </p>
+                </div>
+            </div>
+            <div class="services-footer">
+                <p>As ferramentas mudam. O método permanece.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== METHOD ========== -->
+    <section class="method" id="metodo">
+        <div class="container">
+            <div class="method-header">
+                <span class="section-label">Como eu trabalho</span>
+                <h2 class="section-title">Método focado em impacto</h2>
+                <p class="about-text">
+                    Cada projeto segue um processo estruturado que garante clareza, 
+                    alinhamento estratégico e resultados mensuráveis.
+                </p>
+            </div>
+            <div class="method-grid">
+                <div class="method-card">
+                    <img src="/assets/EHYMiv2CVSj9YbJjIHCthgTk.webp" alt="Exploração" class="method-image" />
+                    <div class="method-number">1</div>
+                    <h3 class="method-title">Exploração</h3>
+                    <p class="method-description">
+                        Testes estratégicos de oferta, canais e mensagens. 
+                        Coleta de dados para identificar onde estão as maiores oportunidades reais de crescimento.
+                    </p>
+                </div>
+                <div class="method-card">
+                    <img src="/assets/Gx4DmD8R4gTdsrXQImHrVxXeLM.webp" alt="Lapidação" class="method-image" />
+                    <div class="method-number">2</div>
+                    <h3 class="method-title">Lapidação</h3>
+                    <p class="method-description">
+                        A partir do que já performa, entra o refinamento: testes A/B, ajustes de jornada, oferta e conversão. 
+                        O foco é melhoria contínua, não achismo.
+                    </p>
+                </div>
+                <div class="method-card">
+                    <img src="/assets/LSerVr2P7Hzu9K0OZya3lYUuUvQ.webp" alt="Escala" class="method-image" />
+                    <div class="method-number">3</div>
+                    <h3 class="method-title">Escala</h3>
+                    <p class="method-description">
+                        Com processos validados, ampliamos alcance e volume, 
+                        aumentando investimento apenas no que já provou resultado.
+                    </p>
+                </div>
+                <div class="method-card">
+                    <img src="/assets/QUrOvvPtkPJQpII9TAHwaEZPY7U.webp" alt="Extração" class="method-image" />
+                    <div class="method-number">4</div>
+                    <h3 class="method-title">Extração</h3>
+                    <p class="method-description">
+                        Maximização do valor da base existente: retenção, remarketing, esteira de produtos e experiência. 
+                        Aqui garantimos que não fique dinheiro na mesa.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== CTA ========== -->
+    <section class="cta-section" id="contato">
+        <div class="container">
+            <div class="cta-container">
+                <h2 class="cta-title">Vamos estruturar seu crescimento</h2>
+                <p class="cta-description">
+                    Se você tem um negócio de serviço e precisa de um sistema previsível de captação, 
+                    conversão e retenção, vamos conversar.
+                </p>
+                <div class="hero-cta-group">
+                    <a href="mailto:oi@romulomonte.com" class="btn-primary">
+                        Enviar e-mail
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M3 8l7.89 5.26a2 2 0 0 0 2.22 0L21 8M5 19h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2z"/>
                         </svg>
-                    </div>
-                    <div class="contact-details">
-                        <span class="contact-label">E-mail</span>
-                        <div class="contact-value">
-                            <a href="mailto:oi@romulomonte.com">oi@romulomonte.com</a>
-                        </div>
-                    </div>
+                    </a>
+                    <a href="https://wa.me/5582993869090" target="_blank" class="btn-secondary">
+                        WhatsApp
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 5a2 2 0 0 1 2-2h3.28a1 1 0 0 1 .948.684l1.498 4.493a1 1 0 0 1-.502 1.21l-2.257 1.13a11.042 11.042 0 0 0 5.516 5.516l1.13-2.257a1 1 0 0 1 1.21-.502l4.493 1.498a1 1 0 0 1 .684.949V19a2 2 0 0 1-2 2h-1C9.716 21 3 14.284 3 6V5z"/>
+                        </svg>
+                    </a>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- ========== RODAPÉ ========== -->
+    <!-- ========== FOOTER ========== -->
     <footer class="footer">
         <div class="container">
-            <p>© Rômulo Monte — Todos os direitos reservados</p>
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>Rômulo Monte</h3>
+                    <p style="color: var(--color-text-secondary); line-height: 1.6;">
+                        Estrategista de crescimento especializado em criar sistemas previsíveis 
+                        para negócios de serviço.
+                    </p>
+                </div>
+                <div class="footer-column">
+                    <h3>Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="#sobre">Sobre</a></li>
+                        <li><a href="#servicos">Serviços</a></li>
+                        <li><a href="#metodo">Método</a></li>
+                        <li><a href="https://www.behance.net/romulo-monte" target="_blank">Portfólio UX/UI</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Contato</h3>
+                    <ul class="footer-links">
+                        <li><a href="mailto:oi@romulomonte.com">oi@romulomonte.com</a></li>
+                        <li><a href="https://wa.me/5582993869090" target="_blank">+55 82 99386-9090</a></li>
+                        <li><a href="https://www.linkedin.com/in/romulo-monte-60477033/" target="_blank">LinkedIn</a></li>
+                        <li><a href="https://www.instagram.com/montedigital/" target="_blank">Instagram</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2025 Rômulo Monte - Todos os direitos reservados</p>
+            </div>
         </div>
     </footer>
 
