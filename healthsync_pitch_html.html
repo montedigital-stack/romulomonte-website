@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HealthSync - Pitch Deck</title>
-    <meta name="description" content="HealthSync - A infraestrutura digital da medicina de acompanhamento">
-    <link rel="icon" type="image/png" href="/assets/Favicon.png">
     <style>
         * {
             margin: 0;
@@ -272,52 +270,36 @@
             font-size: 1.125rem;
         }
 
-        /* Cover Slide with iPhone on Left */
+        /* Cover Slide */
         .cover-slide {
-            display: grid;
-            grid-template-columns: 350px 1fr;
-            gap: 4rem;
-            align-items: center;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .iphone-container {
-            position: relative;
-        }
-
-        .iphone-container img {
-            width: 100%;
-            height: auto;
-            filter: drop-shadow(0 30px 60px rgba(0, 0, 0, 0.6));
-            animation: float 3s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-20px);
-            }
-        }
-
-        .cover-content {
+            text-align: center;
             display: flex;
             flex-direction: column;
+            align-items: center;
+            justify-content: center;
             gap: 2rem;
         }
 
         .cover-logo {
-            width: 6rem;
-            height: 6rem;
+            width: 8rem;
+            height: 8rem;
             background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
-            border-radius: 1.5rem;
+            border-radius: 2rem;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 3rem;
+            font-size: 4rem;
             box-shadow: 0 20px 40px rgba(37, 99, 235, 0.4);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
         }
 
         .cover-title {
@@ -327,12 +309,12 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            line-height: 1.1;
         }
 
         .cover-subtitle {
             font-size: 1.75rem;
             color: #94a3b8;
+            max-width: 900px;
             font-weight: 300;
             line-height: 1.6;
         }
@@ -342,8 +324,20 @@
             padding: 1rem 2rem;
             border-radius: 2rem;
             font-weight: 600;
-            display: inline-block;
-            width: fit-content;
+            margin-top: 1rem;
+        }
+
+        /* iPhone Mockup Container */
+        .iphone-container {
+            position: relative;
+            max-width: 300px;
+            margin: 2rem auto;
+        }
+
+        .iphone-container img {
+            width: 100%;
+            height: auto;
+            filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.5));
         }
 
         /* Table Styles */
@@ -445,25 +439,6 @@
 
         /* Responsive */
         @media (max-width: 1024px) {
-            .cover-slide {
-                grid-template-columns: 1fr;
-                text-align: center;
-                gap: 2rem;
-            }
-
-            .iphone-container {
-                max-width: 250px;
-                margin: 0 auto;
-            }
-
-            .cover-logo {
-                margin: 0 auto;
-            }
-
-            .cover-badge {
-                margin: 0 auto;
-            }
-
             .grid-2, .grid-3, .grid-4 {
                 grid-template-columns: 1fr;
             }
@@ -609,18 +584,16 @@
 
         <!-- Slides Container -->
         <div class="slides-container">
-            <!-- Slide 1: Cover with iPhone on Left -->
+            <!-- Slide 1: Cover -->
             <div class="slide active" id="slide-0">
                 <div class="cover-slide">
                     <div class="iphone-container">
-                        <img src="/assets/iPhone 13 Mini - Silver - Portrait.png" alt="HealthSync App">
+                        <img src="iPhone 13 Mini - Silver - Portrait.png" alt="HealthSync App">
                     </div>
-                    <div class="cover-content">
-                        <div class="cover-logo">⚡</div>
-                        <h1 class="cover-title">HealthSync</h1>
-                        <p class="cover-subtitle">A medicina evoluiu. O acompanhamento ainda não.</p>
-                        <div class="cover-badge">Pitch Deck para Investidores</div>
-                    </div>
+                    <div class="cover-logo">⚡</div>
+                    <h1 class="cover-title">HealthSync</h1>
+                    <p class="cover-subtitle">A medicina evoluiu. O acompanhamento ainda não.</p>
+                    <div class="cover-badge">Pitch Deck para Investidores</div>
                 </div>
             </div>
 
@@ -676,9 +649,7 @@
                 </div>
             </div>
 
-            <!-- Continue com os demais slides... (Slides 4-15 são idênticos ao HTML anterior, apenas mudando o caminho da imagem) -->
-
-<!-- Slide 4: A Solução -->
+            <!-- Slide 4: A Solução -->
             <div class="slide" id="slide-3">
                 <h2 class="slide-title">A Solução: HealthSync</h2>
                 <div class="grid grid-3">
@@ -759,4 +730,421 @@
                             <li>Registro de posologia e horários</li>
                             <li>Lembretes automáticos personalizados</li>
                             <li>Tracking de aderência ao tratamento</li>
-                        
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3 class="card-title">Controle de Acesso</h3>
+                        <ul class="card-text">
+                            <li>Permissões granulares por perfil</li>
+                            <li>Segurança LGPD e HIPAA compliant</li>
+                            <li>Auditoria completa de acessos</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 7: Diferencial -->
+            <div class="slide" id="slide-6">
+                <h2 class="slide-title">Diferencial Estratégico</h2>
+                <div class="card" style="max-width: 1200px; margin: 0 auto;">
+                    <p style="font-size: 2rem; font-weight: 300; text-align: center; margin-bottom: 3rem;">
+                        HealthSync não é mais um app. É infraestrutura clínica digital.
+                    </p>
+                    <div class="grid grid-3">
+                        <div style="text-align: center;">
+                            <div class="card-icon" style="margin: 0 auto 1.5rem;">🛡️</div>
+                            <h3 class="card-title">Alto Lock-in</h3>
+                            <p class="card-text">Histórico clínico completo cria barreira de saída natural</p>
+                        </div>
+                        <div style="text-align: center;">
+                            <div class="card-icon" style="margin: 0 auto 1.5rem;">💰</div>
+                            <h3 class="card-title">Receita Recorrente</h3>
+                            <p class="card-text">Modelo SaaS com previsibilidade financeira</p>
+                        </div>
+                        <div style="text-align: center;">
+                            <div class="card-icon" style="margin: 0 auto 1.5rem;">📈</div>
+                            <h3 class="card-title">Escalabilidade</h3>
+                            <p class="card-text">Protocolo Coimbra é gateway para múltiplas especialidades</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 8: Benchmark -->
+            <div class="slide" id="slide-7">
+                <h2 class="slide-title">Benchmark de Mercado</h2>
+                <div class="card">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Aplicativo</th>
+                                <th>Mercado</th>
+                                <th>Downloads</th>
+                                <th>Receita</th>
+                                <th>Destaque</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="font-weight: 600; color: #fff;">Maven Clinic</td>
+                                <td>EUA (Global)</td>
+                                <td>50K+ Android</td>
+                                <td>US$ 268M/ano</td>
+                                <td style="font-weight: 600; color: #fff;">Valuation US$ 1.7B</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 600; color: #fff;">Apps Médicos Top</td>
+                                <td>Brasil</td>
+                                <td>1K-2.6K/semana</td>
+                                <td>US$ 11.9K-112.9K/semana</td>
+                                <td style="font-weight: 600; color: #fff;">Receita recorrente alta</td>
+                            </tr>
+                            <tr>
+                                <td style="font-weight: 600; color: #fff;">Health & Fitness</td>
+                                <td>Brasil</td>
+                                <td>65K/semana</td>
+                                <td>Até US$ 88.8K/semana</td>
+                                <td style="font-weight: 600; color: #fff;">Milhões de usuários ativos</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="highlight-box">
+                    <p class="highlight-text">Apps de saúde bem posicionados geram receitas superiores a clínicas isoladas no digital</p>
+                </div>
+            </div>
+
+            <!-- Slide 9: Insights -->
+            <div class="slide" id="slide-8">
+                <h2 class="slide-title">Insights de Mercado</h2>
+                <div class="grid grid-2">
+                    <div class="card">
+                        <div class="card-icon" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">📈</div>
+                        <h3 class="card-title">Crescimento Health & Fitness</h3>
+                        <p class="card-text" style="margin-bottom: 1rem;">Crescimento forte de receitas via IAP em 2024. Tendência de recordes em 2025.</p>
+                        <p style="font-weight: 600; font-size: 1.125rem;">Usuários focados em metas de saúde geram alta retenção</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon" style="background: linear-gradient(135deg, #a855f7 0%, #9333ea 100%);">💰</div>
+                        <h3 class="card-title">Apps Médicos Validados</h3>
+                        <p class="card-text" style="margin-bottom: 1rem;">Rankings mostram centenas de milhares de dólares em receita semanal.</p>
+                        <p style="font-weight: 600; font-size: 1.125rem;">Monetização médica é viável, recorrente e escalável</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon" style="background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);">👥</div>
+                        <h3 class="card-title">Engajamento no Brasil</h3>
+                        <p class="card-text" style="margin-bottom: 1rem;">Apps top: 30K-150K downloads semanais</p>
+                        <p style="font-weight: 600; font-size: 1.125rem;">Usuários ativos: dezenas de milhares a milhões</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">🌍</div>
+                        <h3 class="card-title">Maven Clinic Case</h3>
+                        <p class="card-text">Valuation: US$ 1.7B</p>
+                        <p class="card-text" style="margin-bottom: 1rem;">Receita anual: ~US$ 268M</p>
+                        <p style="font-weight: 600; font-size: 1.125rem;">Modelo recorrente e escalável comprovado</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 10: Modelo de Negócio -->
+            <div class="slide" id="slide-9">
+                <h2 class="slide-title">Modelo de Negócio</h2>
+                <div class="grid grid-3">
+                    <div class="card">
+                        <div class="card-icon">👨‍⚕️</div>
+                        <h3 class="card-title">Assinatura Médica</h3>
+                        <p class="card-text" style="font-size: 1.5rem; font-weight: 600; margin: 1rem 0;">R$ 200-400/mês</p>
+                        <ul class="card-text">
+                            <li>Dashboard completo</li>
+                            <li>Gestão ilimitada de pacientes</li>
+                            <li>Suporte prioritário</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">🎯</div>
+                        <h3 class="card-title">Assinatura Paciente</h3>
+                        <p class="card-text" style="font-size: 1.5rem; font-weight: 600; margin: 1rem 0;">R$ 29-59/mês</p>
+                        <ul class="card-text">
+                            <li>Acesso vitalício aos dados</li>
+                            <li>App mobile completo</li>
+                            <li>Alertas e lembretes</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">💼</div>
+                        <h3 class="card-title">Parcerias Estratégicas</h3>
+                        <p class="card-text" style="font-size: 1.5rem; font-weight: 600; margin: 1rem 0;">Receita adicional</p>
+                        <ul class="card-text">
+                            <li>Laboratórios integrados</li>
+                            <li>Clínicas especializadas</li>
+                            <li>Marcas de suplementos</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="highlight-box" style="background: rgba(16, 185, 129, 0.2); border-color: rgba(16, 185, 129, 0.5);">
+                    <p class="highlight-text">Modelo SaaS B2B2C com múltiplas fontes de receita recorrente</p>
+                </div>
+            </div>
+
+            <!-- Slide 11: Sociedade -->
+            <div class="slide" id="slide-10">
+                <h2 class="slide-title">Proposta de Sociedade</h2>
+                <div class="grid grid-2">
+                    <div class="card">
+                        <div class="partnership-box">
+                            <h3 style="font-size: 2rem; font-weight: 700;">Médico Investidor</h3>
+                            <div class="partnership-percentage">30-40%</div>
+                        </div>
+                        <ul style="font-size: 1.125rem; line-height: 1.8; color: #94a3b8;">
+                            <li>Autoridade clínica e validação médica</li>
+                            <li>Imagem pública do produto</li>
+                            <li>Co-criação metodológica</li>
+                            <li>Rede de contatos médicos</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <div class="partnership-box">
+                            <h3 style="font-size: 2rem; font-weight: 700;">Fundador (Rômulo)</h3>
+                            <div class="partnership-percentage">60-70%</div>
+                        </div>
+                        <ul style="font-size: 1.125rem; line-height: 1.8; color: #94a3b8;">
+                            <li>Desenvolvimento do produto</li>
+                            <li>UX/UI e design completo</li>
+                            <li>Estratégia e marketing</li>
+                            <li>Gestão operacional e lançamento</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="highlight-box">
+                    <p class="highlight-text">Parceria estratégica com expertise complementar e alinhamento de interesses</p>
+                </div>
+            </div>
+
+            <!-- Slide 12: Investimento -->
+            <div class="slide" id="slide-11">
+                <h2 class="slide-title">Investimento Inicial</h2>
+                <div class="card" style="max-width: 1200px; margin: 0 auto;">
+                    <div class="grid grid-2">
+                        <div>
+                            <h3 style="font-size: 2rem; font-weight: 700; margin-bottom: 2rem;">Aporte Mensal Sugerido</h3>
+                            <div class="stats-box" style="margin-bottom: 2rem;">
+                                <div class="stats-number">R$ 3.000 - R$ 6.000</div>
+                                <div class="stats-label">por mês</div>
+                            </div>
+                            <div style="background: rgba(37, 99, 235, 0.1); padding: 1.5rem; border-radius: 1rem;">
+                                <p style="font-size: 1.25rem; font-weight: 600; margin-bottom: 0.5rem;">Prazo</p>
+                                <p class="card-text">6 a 12 meses até lançamento</p>
+                            </div>
+                        </div>
+                        <div>
+                            <h3 style="font-size: 2rem; font-weight: 700; margin-bottom: 2rem;">Destinação do Capital</h3>
+                            <div style="display: flex; flex-direction: column; gap: 1rem;">
+                                <div style="background: rgba(37, 99, 235, 0.1); padding: 1.25rem; border-radius: 0.75rem;">
+                                    <p style="font-size: 1.125rem; font-weight: 600;">MVP e Desenvolvimento</p>
+                                </div>
+                                <div style="background: rgba(37, 99, 235, 0.1); padding: 1.25rem; border-radius: 0.75rem;">
+                                    <p style="font-size: 1.125rem; font-weight: 600;">Infraestrutura e Segurança</p>
+                                </div>
+                                <div style="background: rgba(37, 99, 235, 0.1); padding: 1.25rem; border-radius: 0.75rem;">
+                                    <p style="font-size: 1.125rem; font-weight: 600;">Design UX/UI Premium</p>
+                                </div>
+                                <div style="background: rgba(37, 99, 235, 0.1); padding: 1.25rem; border-radius: 0.75rem;">
+                                    <p style="font-size: 1.125rem; font-weight: 600;">Validação e Primeiros Usuários</p>
+                                </div>
+                                <div style="background: rgba(37, 99, 235, 0.1); padding: 1.25rem; border-radius: 0.75rem;">
+                                    <p style="font-size: 1.125rem; font-weight: 600;">Marketing de Lançamento</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 13: Break-even -->
+            <div class="slide" id="slide-12">
+                <h2 class="slide-title">Break-even e Retorno</h2>
+                <div class="grid grid-2">
+                    <div class="card">
+                        <h3 style="font-size: 2rem; font-weight: 700; margin-bottom: 2rem;">Cenário Conservador</h3>
+                        <div style="margin-bottom: 1.5rem;">
+                            <p class="card-text" style="margin-bottom: 0.5rem;">50 médicos x R$ 300/mês</p>
+                            <p style="font-size: 1.75rem; font-weight: 700;">R$ 15.000 MRR</p>
+                        </div>
+                        <div style="margin-bottom: 1.5rem;">
+                            <p class="card-text" style="margin-bottom: 0.5rem;">500 pacientes x R$ 39/mês</p>
+                            <p style="font-size: 1.75rem; font-weight: 700;">R$ 19.500 MRR</p>
+                        </div>
+                        <div class="stats-box" style="margin-top: 2rem;">
+                            <div class="stats-label" style="margin-bottom: 0.5rem;">Receita Total Mensal</div>
+                            <div class="stats-number">R$ 34.500</div>
+                        </div>
+                        <p class="card-text" style="margin-top: 1.5rem;">Break-even estimado em 12-18 meses</p>
+                    </div>
+                    <div class="card">
+                        <h3 style="font-size: 2rem; font-weight: 700; margin-bottom: 2rem;">Cenário Otimista</h3>
+                        <div style="margin-bottom: 1.5rem;">
+                            <p class="card-text" style="margin-bottom: 0.5rem;">150 médicos x R$ 350/mês</p>
+                            <p style="font-size: 1.75rem; font-weight: 700;">R$ 52.500 MRR</p>
+                        </div>
+                        <div style="margin-bottom: 1.5rem;">
+                            <p class="card-text" style="margin-bottom: 0.5rem;">2.000 pacientes x R$ 49/mês</p>
+                            <p style="font-size: 1.75rem; font-weight: 700;">R$ 98.000 MRR</p>
+                        </div>
+                        <div class="stats-box" style="margin-top: 2rem; background: linear-gradient(135deg, #10b981 0%, #059669 100%);">
+                            <div class="stats-label" style="margin-bottom: 0.5rem;">Receita Total Mensal</div>
+                            <div class="stats-number">R$ 150.500</div>
+                        </div>
+                        <p class="card-text" style="margin-top: 1.5rem;">Margem operacional estimada: 60-70%</p>
+                    </div>
+                </div>
+                <div class="highlight-box">
+                    <p class="highlight-text">Distribuição de lucros proporcional à sociedade após break-even</p>
+                </div>
+            </div>
+
+            <!-- Slide 14: Visão -->
+            <div class="slide" id="slide-13">
+                <h2 class="slide-title">Visão de Futuro</h2>
+                <div class="grid grid-2">
+                    <div class="card">
+                        <div class="card-icon">🌍</div>
+                        <h3 class="card-title">Escala Nacional</h3>
+                        <p class="card-text">Expansão para outras especialidades médicas e regiões do Brasil, consolidando posição como líder em gestão clínica digital.</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">🎯</div>
+                        <h3 class="card-title">Modelo White-Label</h3>
+                        <p class="card-text">Licenciamento da plataforma para clínicas, hospitais e redes de saúde com branding customizado.</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">📈</div>
+                        <h3 class="card-title">Expansão Internacional</h3>
+                        <p class="card-text">Mercados de língua portuguesa e espanhola como próximos alvos, seguindo modelo Maven Clinic.</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%);">💰</div>
+                        <h3 class="card-title">Estratégia de Exit</h3>
+                        <p class="card-text">Potencial aquisição por healthtechs maiores, plataformas de telemedicina ou grupos hospitalares.</p>
+                    </div>
+                </div>
+                <div class="card" style="margin-top: 2rem; max-width: 1000px; margin-left: auto; margin-right: auto;">
+                    <p style="font-size: 1.5rem; font-weight: 300; text-align: center; line-height: 1.6;">
+                        O mercado de healthtech está em franca expansão. HealthSync está posicionado para capturar participação significativa deste crescimento.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Slide 15: Closing -->
+            <div class="slide" id="slide-14">
+                <div class="cover-slide">
+                    <div class="cover-logo">⚡</div>
+                    <h1 class="cover-title">HealthSync</h1>
+                    <p class="cover-subtitle">HealthSync não é um app. É a infraestrutura digital da medicina de acompanhamento.</p>
+                    <div class="grid grid-3" style="margin-top: 3rem; max-width: 1000px;">
+                        <div class="card" style="text-align: center;">
+                            <p class="card-text" style="margin-bottom: 0.5rem;">Mercado Validado</p>
+                            <p style="font-size: 1.75rem; font-weight: 700;">US$ 1.7B+</p>
+                        </div>
+                        <div class="card" style="text-align: center;">
+                            <p class="card-text" style="margin-bottom: 0.5rem;">Modelo Recorrente</p>
+                            <p style="font-size: 1.75rem; font-weight: 700;">SaaS B2B2C</p>
+                        </div>
+                        <div class="card" style="text-align: center;">
+                            <p class="card-text" style="margin-bottom: 0.5rem;">Alto Lock-in</p>
+                            <p style="font-size: 1.75rem; font-weight: 700;">Histórico Clínico</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill" style="width: 6.67%;"></div>
+        </div>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const totalSlides = 15;
+        let darkMode = true;
+
+        function updateSlide() {
+            // Hide all slides
+            document.querySelectorAll('.slide').forEach(slide => {
+                slide.classList.remove('active');
+            });
+
+            // Show current slide
+            document.getElementById(`slide-${currentSlide}`).classList.add('active');
+
+            // Update counter
+            document.getElementById('currentSlide').textContent = currentSlide + 1;
+
+            // Update progress bar
+            const progress = ((currentSlide + 1) / totalSlides) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+
+            // Update menu active state
+            document.querySelectorAll('.menu-item').forEach((item, index) => {
+                if (index === currentSlide) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+
+            // Update button states
+            document.getElementById('prevBtn').disabled = currentSlide === 0;
+            document.getElementById('nextBtn').disabled = currentSlide === totalSlides - 1;
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides - 1) {
+                currentSlide++;
+                updateSlide();
+            }
+        }
+
+        function previousSlide() {
+            if (currentSlide > 0) {
+                currentSlide--;
+                updateSlide();
+            }
+        }
+
+        function goToSlide(index) {
+            currentSlide = index;
+            updateSlide();
+            toggleMenu();
+        }
+
+        function toggleMenu() {
+            const menu = document.getElementById('menuDropdown');
+            menu.classList.toggle('active');
+        }
+
+        function toggleTheme() {
+            darkMode = !darkMode;
+            document.body.classList.toggle('light-mode');
+            document.getElementById('themeIcon').textContent = darkMode ? '☀️' : '🌙';
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextSlide();
+            if (e.key === 'ArrowLeft') previousSlide();
+            if (e.key === 'Escape') {
+                const menu = document.getElementById('menuDropdown');
+                if (menu.classList.contains('active')) {
+                    toggleMenu();
+                }
+            }
+        });
+
+        // Initialize
+        document.getElementById('totalSlides').textContent = totalSlides;
+        updateSlide();
+    </script>
+</body>
+</html>
