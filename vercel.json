@@ -1,4 +1,36 @@
 {
-    "version": 2,
-    "regions": ["gru1"]
-  }
+  "version": 2,
+  "regions": ["gru1"],
+  "rewrites": [
+    {
+      "source": "/",
+      "destination": "/index.html",
+      "has": [
+        {
+          "type": "host",
+          "value": "romulomonte.com"
+        }
+      ]
+    },
+    {
+      "source": "/",
+      "destination": "/index.html",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.romulomonte.com"
+        }
+      ]
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/pitch-saude.html",
+      "has": [
+        {
+          "type": "host",
+          "value": "saude.romulomonte.com"
+        }
+      ]
+    }
+  ]
+}
