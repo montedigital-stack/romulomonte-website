@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealthSync - Pitch Deck</title>
+    <meta name="description" content="HealthSync - A infraestrutura digital da medicina de acompanhamento">
+    <link rel="icon" type="image/png" href="/assets/Favicon.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #ffffff;
+            overflow: hidden;
+        }
+
+        .container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .nav-controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.75rem;
+            cursor: pointer;
+            color: white;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(37, 99, 235, 0.4);
+        }
+
+        .btn:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .slide-counter {
+            color: #94a3b8;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        /* Menu Dropdown */
+        .menu-dropdown {
+            position: fixed;
+            top: 80px;
+            left: 2rem;
+            background: rgba(15, 23, 42, 0.98);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            max-height: 70vh;
+            overflow-y: auto;
+            display: none;
+            z-index: 999;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+            min-width: 300px;
+        }
+
+        .menu-dropdown.active {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .menu-item {
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+
+        .menu-item:hover {
+            background: rgba(37, 99, 235, 0.2);
+            border-color: rgba(37, 99, 235, 0.5);
+        }
+
+        .menu-item.active {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+        }
+
+        .menu-item-number {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #94a3b8;
+            margin-bottom: 0.25rem;
+        }
+
+        .menu-item.active .menu-item-number {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .menu-item-title {
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        /* Slides Container */
+        .slides-container {
+            flex: 1;
+            padding: 100px 2rem 60px;
+            overflow: hidden;
+        }
+
+        .slide {
+            display: none;
+            max-width: 1400px;
+            margin: 0 auto;
+            height: calc(100vh - 160px);
+            animation: fadeIn 0.5s ease;
+        }
+
+        .slide.active {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #2563eb 0%, #3b82f6 100%);
+            transition: width 0.3s ease;
+            box-shadow: 0 0 10px rgba(37, 99, 235, 0.5);
+        }
+
+        /* Slide Styles */
+        .slide-title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            background: linear-gradient(135deg, #ffffff 0%, #94a3b8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .slide-subtitle {
+            font-size: 1.5rem;
+            color: #94a3b8;
+            font-weight: 300;
+            line-height: 1.6;
+        }
+
+        .grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .grid-2 {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .grid-3 {
+            grid-template-columns: repeat(3, 1fr);
+        }
+
+        .grid-4 {
+            grid-template-columns: repeat(4, 1fr);
+        }
+
+        .card {
+            background: rgba(30, 41, 59, 0.5);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1.5rem;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(37, 99, 235, 0.5);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .card-icon {
+            width: 4rem;
+            height: 4rem;
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            border-radius: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .card-text {
+            color: #94a3b8;
+            line-height: 1.6;
+            font-size: 1.125rem;
+        }
+
+        /* Cover Slide with iPhone on Left */
+        .cover-slide {
+            display: grid;
+            grid-template-columns: 350px 1fr;
+            gap: 4rem;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .iphone-container {
+            position: relative;
+        }
+
+        .iphone-container img {
+            width: 100%;
+            height: auto;
+            filter: drop-shadow(0 30px 60px rgba(0, 0, 0, 0.6));
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        .cover-content {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .cover-logo {
+            width: 6rem;
+            height: 6rem;
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            border-radius: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            box-shadow: 0 20px 40px rgba(37, 99, 235, 0.4);
+        }
+
+        .cover-title {
+            font-size: 5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #ffffff 0%, #3b82f6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.1;
+        }
+
+        .cover-subtitle {
+            font-size: 1.75rem;
+            color: #94a3b8;
+            font-weight: 300;
+            line-height: 1.6;
+        }
+
+        .cover-badge {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            padding: 1rem 2rem;
+            border-radius: 2rem;
+            font-weight: 600;
+            display: inline-block;
+            width: fit-content;
+        }
+
+        /* Table Styles */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(30, 41, 59, 0.5);
+            backdrop-filter: blur(10px);
+            border-radius: 1rem;
+            overflow: hidden;
+        }
+
+        th {
+            background: rgba(37, 99, 235, 0.2);
+            padding: 1.25rem;
+            text-align: left;
+            font-weight: 700;
+            font-size: 1.125rem;
+        }
+
+        td {
+            padding: 1.25rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #94a3b8;
+            font-size: 1rem;
+        }
+
+        tr:hover {
+            background: rgba(37, 99, 235, 0.1);
+        }
+
+        /* Highlight Box */
+        .highlight-box {
+            background: rgba(37, 99, 235, 0.2);
+            border: 1px solid rgba(37, 99, 235, 0.5);
+            border-radius: 1rem;
+            padding: 2rem;
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .highlight-text {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+
+        /* Stats Box */
+        .stats-box {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            border-radius: 1rem;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .stats-number {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .stats-label {
+            font-size: 1.125rem;
+            opacity: 0.9;
+        }
+
+        /* Theme Toggle */
+        body.light-mode {
+            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
+            color: #0f172a;
+        }
+
+        body.light-mode .navbar,
+        body.light-mode .menu-dropdown {
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        body.light-mode .card {
+            background: rgba(255, 255, 255, 0.8);
+        }
+
+        body.light-mode .slide-title {
+            background: linear-gradient(135deg, #0f172a 0%, #475569 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        body.light-mode .slide-subtitle,
+        body.light-mode .card-text,
+        body.light-mode td,
+        body.light-mode .cover-subtitle {
+            color: #475569;
+        }
+
+        body.light-mode .menu-item-number,
+        body.light-mode .slide-counter {
+            color: #64748b;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .cover-slide {
+                grid-template-columns: 1fr;
+                text-align: center;
+                gap: 2rem;
+            }
+
+            .iphone-container {
+                max-width: 250px;
+                margin: 0 auto;
+            }
+
+            .cover-logo {
+                margin: 0 auto;
+            }
+
+            .cover-badge {
+                margin: 0 auto;
+            }
+
+            .grid-2, .grid-3, .grid-4 {
+                grid-template-columns: 1fr;
+            }
+
+            .slide-title {
+                font-size: 2.5rem;
+            }
+
+            .cover-title {
+                font-size: 3.5rem;
+            }
+        }
+
+        /* List Styles */
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        ul li {
+            padding: 0.75rem 0;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+
+        ul li:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #2563eb;
+            font-weight: bold;
+            font-size: 1.5rem;
+        }
+
+        /* Partnership boxes */
+        .partnership-box {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .partnership-percentage {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            padding: 1rem 2rem;
+            border-radius: 1rem;
+            font-size: 2rem;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Navigation Bar -->
+        <nav class="navbar">
+            <div class="nav-controls">
+                <button class="btn" onclick="toggleMenu()">
+                    <span>☰</span>
+                    <span>Menu</span>
+                </button>
+            </div>
+
+            <div class="slide-counter">
+                <span id="currentSlide">1</span> / <span id="totalSlides">15</span>
+            </div>
+
+            <div class="nav-controls">
+                <button class="btn" id="prevBtn" onclick="previousSlide()">
+                    <span>←</span>
+                </button>
+                <button class="btn" id="nextBtn" onclick="nextSlide()">
+                    <span>→</span>
+                </button>
+                <button class="btn" onclick="toggleTheme()">
+                    <span id="themeIcon">☀️</span>
+                </button>
+            </div>
+        </nav>
+
+        <!-- Menu Dropdown -->
+        <div class="menu-dropdown" id="menuDropdown">
+            <div class="menu-item active" onclick="goToSlide(0)">
+                <div class="menu-item-number">Slide 1</div>
+                <div class="menu-item-title">Abertura</div>
+            </div>
+            <div class="menu-item" onclick="goToSlide(1)">
+                <div class="menu-item-number">Slide 2</div>
+                <div class="menu-item-title">O Problema</div>
+            </div>
+            <div class="menu-item" onclick="goToSlide(2)">
+                <div class="menu-item-number">Slide 3</div>
+                <div class="menu-item-title">Gap no Protocolo Coimbra</div>
+            </div>
+            <div class="menu-item" onclick="goToSlide(3)">
+                <div class="menu-item-number">Slide 4</div>
+                <div class="menu-item-title">A Solução: HealthSync</div>
+            </div>
+            <div class="menu-item" onclick="goToSlide(4)">
+                <div class="menu-item-number">Slide 5</div>
+                <div class="menu-item-title">Como Funciona</div>
+            </div>
+            <div class="menu-item" onclick="goToSlide(5)">
+                <div class="menu-item-number">Slide 6</div>
+                <div class="menu-item-title">Funcionalidades-Chave</div>
+            </div>
+            <div class="menu-item" onclick="goToSlide(6)">
+                <div class="menu-item-number">Slide 7</div>
+                <div class="menu-item-title">Diferencial Estratégico</div>
+            </div>
+            <div class="menu-item" onclick="goToSlide(7)">
+                <div class="menu-item-number">Slide 8</div>
+                <div class="menu-item-title">Benchmark de Mercado</div>
+            </div>
+            <div class="menu-item" onclick="goToSlide(8)">
+                <div class="menu-item-number">Slide 9</div>
+                <div class="menu-item-title">Insights de Mercado</div>
+            </div>
+            <div class="menu-item" onclick="goToSlide(9)">
+                <div class="menu-item-number">Slide 10</div>
+                <div class="menu-item-title">Modelo de Negócio</div>
+            </div>
+            <div class="menu-item" onclick="goToSlide(10)">
+                <div class="menu-item-number">Slide 11</div>
+                <div class="menu-item-title">Proposta de Sociedade</div>
+            </div>
+            <div class="menu-item" onclick="goToSlide(11)">
+                <div class="menu-item-number">Slide 12</div>
+                <div class="menu-item-title">Investimento Inicial</div>
+            </div>
+            <div class="menu-item" onclick="goToSlide(12)">
+                <div class="menu-item-number">Slide 13</div>
+                <div class="menu-item-title">Break-even e Retorno</div>
+            </div>
+            <div class="menu-item" onclick="goToSlide(13)">
+                <div class="menu-item-number">Slide 14</div>
+                <div class="menu-item-title">Visão de Futuro</div>
+            </div>
+            <div class="menu-item" onclick="goToSlide(14)">
+                <div class="menu-item-number">Slide 15</div>
+                <div class="menu-item-title">Encerramento</div>
+            </div>
+        </div>
+
+        <!-- Slides Container -->
+        <div class="slides-container">
+            <!-- Slide 1: Cover with iPhone on Left -->
+            <div class="slide active" id="slide-0">
+                <div class="cover-slide">
+                    <div class="iphone-container">
+                        <img src="/assets/iPhone 13 Mini - Silver - Portrait.png" alt="HealthSync App">
+                    </div>
+                    <div class="cover-content">
+                        <div class="cover-logo">⚡</div>
+                        <h1 class="cover-title">HealthSync</h1>
+                        <p class="cover-subtitle">A medicina evoluiu. O acompanhamento ainda não.</p>
+                        <div class="cover-badge">Pitch Deck para Investidores</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 2: O Problema -->
+            <div class="slide" id="slide-1">
+                <h2 class="slide-title">O Problema</h2>
+                <div class="grid grid-2">
+                    <div class="card">
+                        <div class="card-icon">🛡️</div>
+                        <h3 class="card-title">Fragmentação de Dados</h3>
+                        <p class="card-text">PDFs, fotos, WhatsApp, papel. Informações críticas espalhadas em múltiplos formatos sem integração.</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">📊</div>
+                        <h3 class="card-title">Falta de Histórico Visual</h3>
+                        <p class="card-text">Impossível visualizar evolução clínica. Médicos e pacientes navegam às cegas.</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">⚠️</div>
+                        <h3 class="card-title">Risco Médico</h3>
+                        <p class="card-text">Decisões clínicas baseadas em dados incompletos aumentam risco de erros e complicações.</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">👥</div>
+                        <h3 class="card-title">Abandono de Tratamento</h3>
+                        <p class="card-text">Pacientes perdem acompanhamento pela complexidade de gestão manual de saúde.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 3: Gap no Protocolo Coimbra -->
+            <div class="slide" id="slide-2">
+                <h2 class="slide-title">Gap no Protocolo Coimbra</h2>
+                <div class="card" style="max-width: 1000px; margin: 0 auto;">
+                    <div style="display: flex; align-items: center; gap: 2rem; margin-bottom: 2rem;">
+                        <div class="card-icon">📈</div>
+                        <h3 style="font-size: 2rem; font-weight: 700;">Excelência Médica sem Sistema Digital</h3>
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                        <div style="background: rgba(37, 99, 235, 0.1); padding: 1.5rem; border-radius: 1rem; border-left: 4px solid #2563eb;">
+                            <p style="font-size: 1.25rem; font-weight: 600; margin-bottom: 0.5rem;">Protocolo reconhecido internacionalmente</p>
+                            <p class="card-text">Metodologia clínica avançada com resultados comprovados em condições autoimunes</p>
+                        </div>
+                        <div style="background: rgba(37, 99, 235, 0.1); padding: 1.5rem; border-radius: 1rem; border-left: 4px solid #2563eb;">
+                            <p style="font-size: 1.25rem; font-weight: 600; margin-bottom: 0.5rem;">Acompanhamento manual e fragmentado</p>
+                            <p class="card-text">Evolução clínica invisível ao paciente, sem ferramentas de monitoramento contínuo</p>
+                        </div>
+                        <div style="background: rgba(37, 99, 235, 0.1); padding: 1.5rem; border-radius: 1rem; border-left: 4px solid #2563eb;">
+                            <p style="font-size: 1.25rem; font-weight: 600; margin-bottom: 0.5rem;">Oportunidade estratégica</p>
+                            <p class="card-text">Digitalizar o acompanhamento de excelência com tecnologia de ponta</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Continue com os demais slides... (Slides 4-15 são idênticos ao HTML anterior, apenas mudando o caminho da imagem) -->
+
+<!-- Slide 4: A Solução -->
+            <div class="slide" id="slide-3">
+                <h2 class="slide-title">A Solução: HealthSync</h2>
+                <div class="grid grid-3">
+                    <div class="card" style="text-align: center;">
+                        <div class="card-icon" style="margin: 0 auto 1.5rem;">🛡️</div>
+                        <h3 class="card-title">Centralização Total</h3>
+                        <p class="card-text">Todos os dados clínicos em um único ambiente seguro e visual</p>
+                    </div>
+                    <div class="card" style="text-align: center;">
+                        <div class="card-icon" style="margin: 0 auto 1.5rem;">📈</div>
+                        <h3 class="card-title">Linha do Tempo Clínica</h3>
+                        <p class="card-text">Visualização completa da evolução do paciente ao longo do tratamento</p>
+                    </div>
+                    <div class="card" style="text-align: center;">
+                        <div class="card-icon" style="margin: 0 auto 1.5rem;">👥</div>
+                        <h3 class="card-title">Conexão Integrada</h3>
+                        <p class="card-text">Médicos, laboratórios, profissionais e pacientes em sincronização</p>
+                    </div>
+                </div>
+                <div class="highlight-box">
+                    <p class="highlight-text">HealthSync transforma dados fragmentados em inteligência clínica acionável, permitindo decisões mais precisas e acompanhamento contínuo de alta qualidade.</p>
+                </div>
+            </div>
+
+            <!-- Slide 5: Como Funciona -->
+            <div class="slide" id="slide-4">
+                <h2 class="slide-title">Como Funciona</h2>
+                <div class="grid grid-4">
+                    <div class="card">
+                        <div class="card-icon">1️⃣</div>
+                        <h3 class="card-title">Médico</h3>
+                        <p class="card-text">Define protocolo, solicita exames e acompanha evolução em dashboard</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">2️⃣</div>
+                        <h3 class="card-title">Laboratório</h3>
+                        <p class="card-text">Integração direta: resultados automaticamente no sistema</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">3️⃣</div>
+                        <h3 class="card-title">Profissionais</h3>
+                        <p class="card-text">Nutricionistas, fisios e outros acessam dados relevantes com permissão</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">4️⃣</div>
+                        <h3 class="card-title">Paciente</h3>
+                        <p class="card-text">Visualiza evolução, registra sintomas e gerencia suplementação</p>
+                    </div>
+                </div>
+                <div class="highlight-box">
+                    <p class="highlight-text">Fluxo integrado que elimina pontos de fricção e garante continuidade do cuidado</p>
+                </div>
+            </div>
+
+            <!-- Slide 6: Funcionalidades -->
+            <div class="slide" id="slide-5">
+                <h2 class="slide-title">Funcionalidades-Chave</h2>
+                <div class="grid grid-2">
+                    <div class="card">
+                        <h3 class="card-title">Dashboard do Paciente</h3>
+                        <ul class="card-text">
+                            <li>Visão 360 graus da saúde em tempo real</li>
+                            <li>Gráficos evolutivos de marcadores clínicos</li>
+                            <li>Alertas inteligentes de exames e medicações</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3 class="card-title">Gestão de Exames</h3>
+                        <ul class="card-text">
+                            <li>Upload via PDF ou foto com OCR</li>
+                            <li>Histórico completo organizado cronologicamente</li>
+                            <li>Comparação automática entre períodos</li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <h3 class="card-title">Suplementação e Medicação</h3>
+                        <ul class="card-text">
+                            <li>Registro de posologia e horários</li>
+                            <li>Lembretes automáticos personalizados</li>
+                            <li>Tracking de aderência ao tratamento</li>
+                        
