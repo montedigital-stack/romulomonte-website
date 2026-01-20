@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FinTech - Controle de Capital de Giro</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .card h2 {
+            font-size: 1.3em;
+            margin-bottom: 15px;
+            color: #667eea;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        /* Capital de Giro - Seção Central */
+        .capital-giro {
+            grid-column: 1 / -1;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        .capital-giro h2 {
+            color: white;
+            border-bottom: 2px solid rgba(255,255,255,0.3);
+            font-size: 1.5em;
+        }
+
+        .capital-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .metric {
+            background: rgba(255,255,255,0.1);
+            padding: 20px;
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+        }
+
+        .metric-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+            margin-bottom: 5px;
+        }
+
+        .metric-value {
+            font-size: 2em;
+            font-weight: bold;
+        }
+
+        .metric-value.negative {
+            color: #ff6b6b;
+        }
+
+        /* Alertas */
+        .alert {
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            display: none;
+        }
+
+        .alert.show {
+            display: block;
+        }
+
+        .alert-danger {
+            background: #ff6b6b;
+            color: white;
+            border-left: 5px solid #c92a2a;
+            animation: pulse 2s infinite;
+        }
+
+        .alert-warning {
+            background: #ffd93d;
+            color: #333;
+            border-left: 5px solid #f59f00;
+        }
+
+        .alert-success {
+            background: #51cf66;
+            color: white;
+            border-left: 5px solid #2f9e44;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+
+        /* Formulários */
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #555;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 500;
+            transition: background 0.3s;
+        }
+
+        .btn:hover {
+            background: #5568d3;
+        }
+
+        .btn-danger {
+            background: #ff6b6b;
+        }
+
+        .btn-danger:hover {
+            background: #ee5a52;
+        }
+
+        .btn-success {
+            background: #51cf66;
+        }
+
+        .btn-success:hover {
+            background: #40c057;
+        }
+
+        /* Tabelas */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        table th,
+        table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .status-paid {
+            color: #51cf66;
+            font-weight: bold;
+        }
+
+        .status-pending {
+            color: #ff6b6b;
+            font-weight: bold;
+        }
+
+        .status-warning {
+            color: #ffd93d;
+            font-weight: bold;
+        }
+
+        /* Totais */
+        .totals {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 2px solid #eee;
+        }
+
+        .total-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+
+        .total-label {
+            font-weight: 500;
+        }
+
+        .total-value {
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        /* Simulação */
+        .simulation {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+
+        .simulation-result {
+            margin-top: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 5px;
+            border-left: 4px solid #667eea;
+        }
+
+        /* Responsivo */
+        @media (max-width: 768px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+
+            .capital-metrics {
+                grid-template-columns: 1fr;
+            }
+
+            .totals {
+                grid-template-columns: 1fr;
+            }
+
+            header h1 {
+                font-size: 1.5em;
+            }
+        }
+
+        /* Destaque Combustível */
+        .highlight-fuel {
+            background: #fff3bf !important;
+            border-left: 4px solid #ffd93d;
+        }
+
+        /* Vencimento próximo */
+        .due-soon {
+            background: #ffe3e3 !important;
+        }
+
+        /* Controles de período */
+        .period-selector {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .period-btn {
+            padding: 8px 16px;
+            border: 2px solid #667eea;
+            background: white;
+            color: #667eea;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .period-btn.active {
+            background: #667eea;
+            color: white;
+        }
+
+        .period-btn:hover {
+            background: #667eea;
+            color: white;
+        }
+
+        /* Ações das tabelas */
+        .table-actions {
+            display: flex;
+            gap: 5px;
+        }
+
+        .btn-small {
+            padding: 5px 10px;
+            font-size: 0.85em;
+        }
+
+        /* Loading state */
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #667eea;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>💰 FinTech - Controle de Capital de Giro</h1>
+            <p>Gestão financeira inteligente para seu negócio de revenda</p>
+        </header>
+
+        <!-- Alertas -->
+        <div id="alertContainer"></div>
+
+        <!-- CAPITAL DE GIRO - SEÇÃO CENTRAL -->
+        <div class="card capital-giro">
+            <h2>📊 CAPITAL DE GIRO</h2>
+            <div class="capital-metrics">
+                <div class="metric">
+                    <div class="metric-label">Capital Disponível</div>
+                    <div class="metric-value" id="capitalDisponivel">R$ 0,00</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-label">Reserva (10%)</div>
+                    <div class="metric-value" id="reservaAcumulada">R$ 0,00</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-label">Comprometido (Mês)</div>
+                    <div class="metric-value" id="totalComprometido">R$ 0,00</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-label">Saldo Projetado</div>
+                    <div class="metric-value" id="saldoProjetado">R$ 0,00</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard">
+            <!-- ENTRADAS (RECEITAS) -->
+            <div class="card">
+                <h2>💵 Entradas (Receitas)</h2>
+
+                <div class="period-selector">
+                    <button class="period-btn active" data-period="week">Semanal</button>
+                    <button class="period-btn" data-period="month">Mensal</button>
+                    <button class="period-btn" data-period="semester">Semestral</button>
+                    <button class="period-btn" data-period="year">Anual</button>
+                </div>
+
+                <form id="formEntrada">
+                    <div class="form-group">
+                        <label>Data</label>
+                        <input type="date" id="entradaData" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Origem</label>
+                        <input type="text" id="entradaOrigem" placeholder="Ex: Venda mercadoria A" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Valor (R$)</label>
+                        <input type="number" id="entradaValor" step="0.01" min="0" placeholder="0.00" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Tipo</label>
+                        <select id="entradaTipo" required>
+                            <option value="mercadoria">Mercadoria (sandálias)</option>
+                            <option value="servico">Serviço (mobilidade urbana)</option>
+                            <option value="outro">Outro</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-success">+ Adicionar Entrada</button>
+                </form>
+
+                <div class="totals">
+                    <div class="total-item">
+                        <span class="total-label">Semanal:</span>
+                        <span class="total-value" id="receitaSemanal">R$ 0,00</span>
+                    </div>
+                    <div class="total-item">
+                        <span class="total-label">Mensal:</span>
+                        <span class="total-value" id="receitaMensal">R$ 0,00</span>
+                    </div>
+                    <div class="total-item">
+                        <span class="total-label">Semestral:</span>
+                        <span class="total-value" id="receitaSemestral">R$ 0,00</span>
+                    </div>
+                    <div class="total-item">
+                        <span class="total-label">Anual:</span>
+                        <span class="total-value" id="receitaAnual">R$ 0,00</span>
+                    </div>
+                </div>
+
+                <table id="tabelaEntradas">
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Origem</th>
+                            <th>Tipo</th>
+                            <th>Valor Bruto</th>
+                            <th>Capital (90%)</th>
+                            <th>Reserva (10%)</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="listaEntradas">
+                        <tr>
+                            <td colspan="7" style="text-align: center; color: #999;">Nenhuma entrada cadastrada</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- DESPESAS FIXAS MENSAIS -->
+            <div class="card">
+                <h2>📅 Despesas Fixas Mensais</h2>
+
+                <table id="tabelaDespesasFixas">
+                    <thead>
+                        <tr>
+                            <th>Descrição</th>
+                            <th>Valor</th>
+                            <th>Vencimento</th>
+                            <th>Status</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="listaDespesasFixas">
+                        <!-- Será preenchido via JavaScript -->
+                    </tbody>
+                </table>
+
+                <div class="totals">
+                    <div class="total-item">
+                        <span class="total-label">Total Fixo Mensal:</span>
+                        <span class="total-value" id="totalDespesasFixas">R$ 0,00</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DESPESAS VARIÁVEIS -->
+            <div class="card">
+                <h2>🔄 Despesas Variáveis</h2>
+
+                <form id="formDespesaVariavel">
+                    <div class="form-group">
+                        <label>Data</label>
+                        <input type="date" id="despesaData" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Tipo</label>
+                        <select id="despesaTipo" required>
+                            <option value="combustivel">⛽ Combustível</option>
+                            <option value="frete">🚚 Frete</option>
+                            <option value="manutencao">🔧 Manutenção</option>
+                            <option value="emprestimo">💳 Empréstimo</option>
+                            <option value="outro">📦 Outro</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Descrição</label>
+                        <input type="text" id="despesaDescricao" placeholder="Ex: Abastecimento completo" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Valor (R$)</label>
+                        <input type="number" id="despesaValor" step="0.01" min="0" placeholder="0.00" required>
+                    </div>
+                    <button type="submit" class="btn btn-danger">+ Adicionar Despesa</button>
+                </form>
+
+                <table id="tabelaDespesasVariaveis">
+                    <thead>
+                        <tr>
+                            <th>Data</th>
+                            <th>Tipo</th>
+                            <th>Descrição</th>
+                            <th>Valor</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="listaDespesasVariaveis">
+                        <tr>
+                            <td colspan="5" style="text-align: center; color: #999;">Nenhuma despesa cadastrada</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="totals">
+                    <div class="total-item">
+                        <span class="total-label">Total Variável (Mês):</span>
+                        <span class="total-value" id="totalDespesasVariaveis">R$ 0,00</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SIMULAÇÃO / PROJEÇÃO -->
+            <div class="card">
+                <h2>🎯 Simulação e Projeção</h2>
+
+                <div class="simulation">
+                    <h3 style="margin-bottom: 15px;">Quanto preciso faturar até dia 8?</h3>
+                    <button class="btn" onclick="simularDia8()">🔮 Calcular Projeção</button>
+                    <div id="resultadoDia8" class="simulation-result hidden"></div>
+                </div>
+
+                <div class="simulation">
+                    <h3 style="margin-bottom: 15px;">Simular Compra de Mercadoria</h3>
+                    <div class="form-group">
+                        <label>Valor da Compra (R$)</label>
+                        <input type="number" id="simulacaoCompra" step="0.01" min="0" placeholder="0.00">
+                    </div>
+                    <button class="btn" onclick="simularCompra()">💰 Simular Impacto</button>
+                    <div id="resultadoCompra" class="simulation-result hidden"></div>
+                </div>
+
+                <div class="simulation">
+                    <h3 style="margin-bottom: 15px;">Simular Venda Atrasada</h3>
+                    <div class="form-group">
+                        <label>Valor da Venda (R$)</label>
+                        <input type="number" id="simulacaoVenda" step="0.01" min="0" placeholder="0.00">
+                    </div>
+                    <div class="form-group">
+                        <label>Dias de Atraso</label>
+                        <input type="number" id="simulacaoDias" min="1" placeholder="0">
+                    </div>
+                    <button class="btn" onclick="simularAtraso()">⏰ Simular Impacto</button>
+                    <div id="resultadoAtraso" class="simulation-result hidden"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==========================================
+        // CONFIGURAÇÕES GLOBAIS
+        // ==========================================
+        const API_BASE_URL = '/api/fintech';
+        const ALERTA_MINIMO = 1000; // R$ 1.000 mínimo de segurança
+        const RESERVA_PERCENTUAL = 0.10; // 10% de reserva
+
+        // ==========================================
+        // ESTADO DA APLICAÇÃO
+        // ==========================================
+        let state = {
+            entradas: [],
+            despesasFixas: [],
+            despesasVariaveis: [],
+            capitalDisponivel: 0,
+            reservaAcumulada: 0
+        };
+
+        // ==========================================
+        // INICIALIZAÇÃO
+        // ==========================================
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Definir data de hoje nos campos de data
+            const hoje = new Date().toISOString().split('T')[0];
+            document.getElementById('entradaData').value = hoje;
+            document.getElementById('despesaData').value = hoje;
+
+            // Inicializar despesas fixas padrão
+            inicializarDespesasFixas();
+
+            // Carregar dados do backend
+            await carregarDados();
+
+            // Event listeners
+            document.getElementById('formEntrada').addEventListener('submit', adicionarEntrada);
+            document.getElementById('formDespesaVariavel').addEventListener('submit', adicionarDespesaVariavel);
+
+            // Period selector
+            document.querySelectorAll('.period-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    document.querySelectorAll('.period-btn').forEach(b => b.classList.remove('active'));
+                    e.target.classList.add('active');
+                    calcularTotais();
+                });
+            });
+
+            // Atualizar interface
+            renderizar();
+        });
+
+        // ==========================================
+        // DESPESAS FIXAS PADRÃO
+        // ==========================================
+        function inicializarDespesasFixas() {
+            if (state.despesasFixas.length === 0) {
+                state.despesasFixas = [
+                    { id: 1, descricao: 'Carro', valor: 1650, vencimento: 8, pago: false },
+                    { id: 2, descricao: 'Internet', valor: 110, vencimento: 5, pago: false },
+                    { id: 3, descricao: 'Energia', valor: 300, vencimento: 20, pago: false },
+                    { id: 4, descricao: 'Água', valor: 80, vencimento: 20, pago: false },
+                    { id: 5, descricao: 'Alimentação', valor: 800, vencimento: 15, pago: false }
+                ];
+            }
+        }
+
+        // ==========================================
+        // API - BACKEND
+        // ==========================================
+        async function carregarDados() {
+            try {
+                const response = await fetch(`${API_BASE_URL}/data`);
+                if (response.ok) {
+                    const data = await response.json();
+                    state = { ...state, ...data };
+                }
+            } catch (error) {
+                console.log('Iniciando com dados locais');
+            }
+        }
+
+        async function salvarDados() {
+            try {
+                await fetch(`${API_BASE_URL}/data`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(state)
+                });
+            } catch (error) {
+                console.error('Erro ao salvar:', error);
+            }
+        }
+
+        // ==========================================
+        // ENTRADAS
+        // ==========================================
+        async function adicionarEntrada(e) {
+            e.preventDefault();
+
+            const valorBruto = parseFloat(document.getElementById('entradaValor').value);
+            const reserva = valorBruto * RESERVA_PERCENTUAL;
+            const capital = valorBruto - reserva;
+
+            const entrada = {
+                id: Date.now(),
+                data: document.getElementById('entradaData').value,
+                origem: document.getElementById('entradaOrigem').value,
+                tipo: document.getElementById('entradaTipo').value,
+                valorBruto: valorBruto,
+                capital: capital,
+                reserva: reserva
+            };
+
+            state.entradas.push(entrada);
+            state.capitalDisponivel += capital;
+            state.reservaAcumulada += reserva;
+
+            await salvarDados();
+            renderizar();
+
+            // Limpar formulário
+            e.target.reset();
+            document.getElementById('entradaData').value = new Date().toISOString().split('T')[0];
+
+            mostrarAlerta(`✅ Entrada adicionada! Capital: R$ ${capital.toFixed(2)} | Reserva: R$ ${reserva.toFixed(2)}`, 'success');
+        }
+
+        function removerEntrada(id) {
+            const entrada = state.entradas.find(e => e.id === id);
+            if (!entrada) return;
+
+            if (confirm('Deseja realmente remover esta entrada?')) {
+                state.capitalDisponivel -= entrada.capital;
+                state.reservaAcumulada -= entrada.reserva;
+                state.entradas = state.entradas.filter(e => e.id !== id);
+
+                salvarDados();
+                renderizar();
+                mostrarAlerta('Entrada removida com sucesso', 'warning');
+            }
+        }
+
+        // ==========================================
+        // DESPESAS FIXAS
+        // ==========================================
+        function togglePagamentoDespesaFixa(id) {
+            const despesa = state.despesasFixas.find(d => d.id === id);
+            if (!despesa) return;
+
+            despesa.pago = !despesa.pago;
+
+            if (despesa.pago) {
+                state.capitalDisponivel -= despesa.valor;
+                mostrarAlerta(`✅ Despesa "${despesa.descricao}" marcada como paga`, 'success');
+            } else {
+                state.capitalDisponivel += despesa.valor;
+                mostrarAlerta(`⚠️ Despesa "${despesa.descricao}" desmarcada`, 'warning');
+            }
+
+            salvarDados();
+            renderizar();
+        }
+
+        function editarDespesaFixa(id) {
+            const despesa = state.despesasFixas.find(d => d.id === id);
+            if (!despesa) return;
+
+            const novoValor = prompt(`Editar valor de "${despesa.descricao}":`, despesa.valor);
+            if (novoValor !== null && !isNaN(novoValor)) {
+                despesa.valor = parseFloat(novoValor);
+                salvarDados();
+                renderizar();
+                mostrarAlerta('Valor atualizado com sucesso', 'success');
+            }
+        }
+
+        // ==========================================
+        // DESPESAS VARIÁVEIS
+        // ==========================================
+        async function adicionarDespesaVariavel(e) {
+            e.preventDefault();
+
+            const despesa = {
+                id: Date.now(),
+                data: document.getElementById('despesaData').value,
+                tipo: document.getElementById('despesaTipo').value,
+                descricao: document.getElementById('despesaDescricao').value,
+                valor: parseFloat(document.getElementById('despesaValor').value)
+            };
+
+            state.despesasVariaveis.push(despesa);
+            state.capitalDisponivel -= despesa.valor;
+
+            await salvarDados();
+            renderizar();
+
+            e.target.reset();
+            document.getElementById('despesaData').value = new Date().toISOString().split('T')[0];
+
+            mostrarAlerta(`Despesa adicionada: -R$ ${despesa.valor.toFixed(2)}`, 'warning');
+        }
+
+        function removerDespesaVariavel(id) {
+            const despesa = state.despesasVariaveis.find(d => d.id === id);
+            if (!despesa) return;
+
+            if (confirm('Deseja realmente remover esta despesa?')) {
+                state.capitalDisponivel += despesa.valor;
+                state.despesasVariaveis = state.despesasVariaveis.filter(d => d.id !== id);
+
+                salvarDados();
+                renderizar();
+                mostrarAlerta('Despesa removida com sucesso', 'success');
+            }
+        }
+
+        // ==========================================
+        // CÁLCULOS
+        // ==========================================
+        function calcularTotais() {
+            const periodo = document.querySelector('.period-btn.active').dataset.period;
+            const hoje = new Date();
+
+            let dataInicio;
+            switch(periodo) {
+                case 'week':
+                    dataInicio = new Date(hoje.getTime() - 7 * 24 * 60 * 60 * 1000);
+                    break;
+                case 'month':
+                    dataInicio = new Date(hoje.getFullYear(), hoje.getMonth(), 1);
+                    break;
+                case 'semester':
+                    dataInicio = new Date(hoje.getFullYear(), hoje.getMonth() - 6, 1);
+                    break;
+                case 'year':
+                    dataInicio = new Date(hoje.getFullYear(), 0, 1);
+                    break;
+            }
+
+            const receitaPeriodo = state.entradas
+                .filter(e => new Date(e.data) >= dataInicio)
+                .reduce((sum, e) => sum + e.valorBruto, 0);
+
+            // Atualizar display do período ativo
+            const periodos = {
+                week: 'receitaSemanal',
+                month: 'receitaMensal',
+                semester: 'receitaSemestral',
+                year: 'receitaAnual'
+            };
+
+            // Limpar todos
+            Object.values(periodos).forEach(id => {
+                document.getElementById(id).textContent = 'R$ 0,00';
+            });
+
+            // Definir o período ativo
+            document.getElementById(periodos[periodo]).textContent = formatarMoeda(receitaPeriodo);
+
+            // Calcular totais gerais
+            const totalDespesasFixas = state.despesasFixas
+                .filter(d => !d.pago)
+                .reduce((sum, d) => sum + d.valor, 0);
+
+            const totalDespesasVariaveis = state.despesasVariaveis
+                .filter(d => new Date(d.data).getMonth() === hoje.getMonth())
+                .reduce((sum, d) => sum + d.valor, 0);
+
+            document.getElementById('totalDespesasFixas').textContent = formatarMoeda(totalDespesasFixas);
+            document.getElementById('totalDespesasVariaveis').textContent = formatarMoeda(totalDespesasVariaveis);
+
+            return {
+                totalDespesasFixas,
+                totalDespesasVariaveis,
+                totalComprometido: totalDespesasFixas + totalDespesasVariaveis
+            };
+        }
+
+        function atualizarCapitalGiro() {
+            const totais = calcularTotais();
+            const saldoProjetado = state.capitalDisponivel - totais.totalComprometido;
+
+            document.getElementById('capitalDisponivel').textContent = formatarMoeda(state.capitalDisponivel);
+            document.getElementById('reservaAcumulada').textContent = formatarMoeda(state.reservaAcumulada);
+            document.getElementById('totalComprometido').textContent = formatarMoeda(totais.totalComprometido);
+
+            const saldoEl = document.getElementById('saldoProjetado');
+            saldoEl.textContent = formatarMoeda(saldoProjetado);
+
+            if (saldoProjetado < 0) {
+                saldoEl.classList.add('negative');
+            } else {
+                saldoEl.classList.remove('negative');
+            }
+
+            // Verificar alertas
+            verificarAlertas(saldoProjetado, totais);
+        }
+
+        // ==========================================
+        // ALERTAS
+        // ==========================================
+        function verificarAlertas(saldoProjetado, totais) {
+            const alertContainer = document.getElementById('alertContainer');
+            alertContainer.innerHTML = '';
+
+            // Alerta crítico - Capital abaixo do mínimo
+            if (saldoProjetado < ALERTA_MINIMO) {
+                mostrarAlerta(
+                    `🚨 RISCO DE FICAR SEM CAPITAL DE GIRO! Saldo projetado: ${formatarMoeda(saldoProjetado)} (mínimo: ${formatarMoeda(ALERTA_MINIMO)})`,
+                    'danger',
+                    true
+                );
+            }
+
+            // Alertas de vencimento
+            const hoje = new Date();
+            const diaHoje = hoje.getDate();
+
+            state.despesasFixas.forEach(despesa => {
+                if (!despesa.pago) {
+                    const diasAteVencimento = despesa.vencimento - diaHoje;
+                    if (diasAteVencimento <= 3 && diasAteVencimento >= 0) {
+                        mostrarAlerta(
+                            `⏰ Despesa "${despesa.descricao}" vence em ${diasAteVencimento} dia(s) - Valor: ${formatarMoeda(despesa.valor)}`,
+                            'warning',
+                            true
+                        );
+                    }
+                }
+            });
+
+            // Alerta positivo
+            if (saldoProjetado >= ALERTA_MINIMO && state.capitalDisponivel > 0) {
+                mostrarAlerta(
+                    `✅ Capital de giro saudável! Saldo projetado: ${formatarMoeda(saldoProjetado)}`,
+                    'success',
+                    true
+                );
+            }
+        }
+
+        function mostrarAlerta(mensagem, tipo = 'warning', permanente = false) {
+            const alertContainer = document.getElementById('alertContainer');
+            const alert = document.createElement('div');
+            alert.className = `alert alert-${tipo} show`;
+            alert.textContent = mensagem;
+
+            alertContainer.appendChild(alert);
+
+            if (!permanente) {
+                setTimeout(() => {
+                    alert.classList.remove('show');
+                    setTimeout(() => alert.remove(), 300);
+                }, 5000);
+            }
+        }
+
+        // ==========================================
+        // SIMULAÇÕES
+        // ==========================================
+        function simularDia8() {
+            const hoje = new Date();
+            const diaHoje = hoje.getDate();
+            const dia8 = 8;
+
+            const despesasAteDia8 = state.despesasFixas
+                .filter(d => !d.pago && d.vencimento <= dia8)
+                .reduce((sum, d) => sum + d.valor, 0);
+
+            const necessarioAteData = despesasAteDia8 - state.capitalDisponivel;
+            const necessarioComMargem = necessarioAteData + ALERTA_MINIMO;
+
+            const resultado = document.getElementById('resultadoDia8');
+            resultado.classList.remove('hidden');
+
+            if (necessarioAteData > 0) {
+                resultado.innerHTML = `
+                    <strong>📊 Projeção até dia 8:</strong><br>
+                    💰 Capital atual: ${formatarMoeda(state.capitalDisponivel)}<br>
+                    📅 Despesas até dia 8: ${formatarMoeda(despesasAteDia8)}<br>
+                    <br>
+                    <strong style="color: #ff6b6b;">❌ Falta: ${formatarMoeda(necessarioAteData)}</strong><br>
+                    <strong style="color: #ffd93d;">⚠️ Com margem de segurança: ${formatarMoeda(necessarioComMargem)}</strong>
+                `;
+            } else {
+                resultado.innerHTML = `
+                    <strong>📊 Projeção até dia 8:</strong><br>
+                    💰 Capital atual: ${formatarMoeda(state.capitalDisponivel)}<br>
+                    📅 Despesas até dia 8: ${formatarMoeda(despesasAteDia8)}<br>
+                    <br>
+                    <strong style="color: #51cf66;">✅ Você tem capital suficiente!</strong><br>
+                    Sobra: ${formatarMoeda(Math.abs(necessarioAteData))}
+                `;
+            }
+        }
+
+        function simularCompra() {
+            const valorCompra = parseFloat(document.getElementById('simulacaoCompra').value) || 0;
+
+            if (valorCompra === 0) {
+                alert('Por favor, informe o valor da compra');
+                return;
+            }
+
+            const capitalAposCompra = state.capitalDisponivel - valorCompra;
+            const totais = calcularTotais();
+            const saldoProjetado = capitalAposCompra - totais.totalComprometido;
+
+            const resultado = document.getElementById('resultadoCompra');
+            resultado.classList.remove('hidden');
+
+            let statusCompra = '';
+            let corStatus = '';
+
+            if (saldoProjetado >= ALERTA_MINIMO) {
+                statusCompra = '✅ COMPRA VIÁVEL';
+                corStatus = '#51cf66';
+            } else if (saldoProjetado >= 0) {
+                statusCompra = '⚠️ COMPRA ARRISCADA';
+                corStatus = '#ffd93d';
+            } else {
+                statusCompra = '❌ COMPRA INVIÁVEL';
+                corStatus = '#ff6b6b';
+            }
+
+            resultado.innerHTML = `
+                <strong>💰 Simulação de Compra:</strong><br>
+                Valor da compra: ${formatarMoeda(valorCompra)}<br>
+                Capital após compra: ${formatarMoeda(capitalAposCompra)}<br>
+                Contas a pagar: ${formatarMoeda(totais.totalComprometido)}<br>
+                <br>
+                <strong style="color: ${corStatus};">${statusCompra}</strong><br>
+                Saldo projetado: ${formatarMoeda(saldoProjetado)}
+            `;
+        }
+
+        function simularAtraso() {
+            const valorVenda = parseFloat(document.getElementById('simulacaoVenda').value) || 0;
+            const diasAtraso = parseInt(document.getElementById('simulacaoDias').value) || 0;
+
+            if (valorVenda === 0 || diasAtraso === 0) {
+                alert('Por favor, informe o valor e os dias de atraso');
+                return;
+            }
+
+            const hoje = new Date();
+            const dataRecebimento = new Date(hoje.getTime() + diasAtraso * 24 * 60 * 60 * 1000);
+
+            // Despesas que vencem antes do recebimento
+            const despesasAntesRecebimento = state.despesasFixas
+                .filter(d => !d.pago && d.vencimento < dataRecebimento.getDate())
+                .reduce((sum, d) => sum + d.valor, 0);
+
+            const deficit = despesasAntesRecebimento - state.capitalDisponivel;
+
+            const resultado = document.getElementById('resultadoAtraso');
+            resultado.classList.remove('hidden');
+
+            let statusAtraso = '';
+            let corStatus = '';
+
+            if (deficit <= 0) {
+                statusAtraso = '✅ SEM IMPACTO CRÍTICO';
+                corStatus = '#51cf66';
+            } else if (deficit < valorVenda * 0.9) {
+                statusAtraso = '⚠️ IMPACTO MODERADO';
+                corStatus = '#ffd93d';
+            } else {
+                statusAtraso = '❌ IMPACTO CRÍTICO';
+                corStatus = '#ff6b6b';
+            }
+
+            resultado.innerHTML = `
+                <strong>⏰ Simulação de Atraso:</strong><br>
+                Valor da venda: ${formatarMoeda(valorVenda)}<br>
+                Dias de atraso: ${diasAtraso}<br>
+                Data de recebimento: ${dataRecebimento.toLocaleDateString('pt-BR')}<br>
+                <br>
+                Despesas que vencem antes: ${formatarMoeda(despesasAntesRecebimento)}<br>
+                Capital atual: ${formatarMoeda(state.capitalDisponivel)}<br>
+                <br>
+                <strong style="color: ${corStatus};">${statusAtraso}</strong><br>
+                ${deficit > 0 ? `Faltarão: ${formatarMoeda(deficit)}` : 'Você consegue pagar todas as contas'}
+            `;
+        }
+
+        // ==========================================
+        // RENDERIZAÇÃO
+        // ==========================================
+        function renderizar() {
+            renderizarEntradas();
+            renderizarDespesasFixas();
+            renderizarDespesasVariaveis();
+            calcularTotais();
+            atualizarCapitalGiro();
+        }
+
+        function renderizarEntradas() {
+            const tbody = document.getElementById('listaEntradas');
+
+            if (state.entradas.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: #999;">Nenhuma entrada cadastrada</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = state.entradas
+                .sort((a, b) => new Date(b.data) - new Date(a.data))
+                .map(e => `
+                    <tr>
+                        <td>${new Date(e.data).toLocaleDateString('pt-BR')}</td>
+                        <td>${e.origem}</td>
+                        <td>${e.tipo}</td>
+                        <td><strong>${formatarMoeda(e.valorBruto)}</strong></td>
+                        <td style="color: #51cf66;">${formatarMoeda(e.capital)}</td>
+                        <td style="color: #667eea;">${formatarMoeda(e.reserva)}</td>
+                        <td class="table-actions">
+                            <button class="btn btn-danger btn-small" onclick="removerEntrada(${e.id})">Remover</button>
+                        </td>
+                    </tr>
+                `).join('');
+        }
+
+        function renderizarDespesasFixas() {
+            const tbody = document.getElementById('listaDespesasFixas');
+            const hoje = new Date().getDate();
+
+            tbody.innerHTML = state.despesasFixas.map(d => {
+                const diasAteVencimento = d.vencimento - hoje;
+                const classVencimento = !d.pago && diasAteVencimento <= 3 && diasAteVencimento >= 0 ? 'due-soon' : '';
+                const statusClass = d.pago ? 'status-paid' : 'status-pending';
+                const statusTexto = d.pago ? '✅ Pago' : '⏳ Pendente';
+
+                return `
+                    <tr class="${classVencimento}">
+                        <td><strong>${d.descricao}</strong></td>
+                        <td>${formatarMoeda(d.valor)}</td>
+                        <td>Dia ${d.vencimento}</td>
+                        <td class="${statusClass}">${statusTexto}</td>
+                        <td class="table-actions">
+                            <button class="btn btn-small ${d.pago ? 'btn-danger' : 'btn-success'}"
+                                    onclick="togglePagamentoDespesaFixa(${d.id})">
+                                ${d.pago ? 'Desmarcar' : 'Pagar'}
+                            </button>
+                            <button class="btn btn-small" onclick="editarDespesaFixa(${d.id})">Editar</button>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function renderizarDespesasVariaveis() {
+            const tbody = document.getElementById('listaDespesasVariaveis');
+
+            if (state.despesasVariaveis.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #999;">Nenhuma despesa cadastrada</td></tr>';
+                return;
+            }
+
+            tbody.innerHTML = state.despesasVariaveis
+                .sort((a, b) => new Date(b.data) - new Date(a.data))
+                .map(d => {
+                    const classCombustivel = d.tipo === 'combustivel' ? 'highlight-fuel' : '';
+                    const emoji = {
+                        combustivel: '⛽',
+                        frete: '🚚',
+                        manutencao: '🔧',
+                        emprestimo: '💳',
+                        outro: '📦'
+                    }[d.tipo] || '📦';
+
+                    return `
+                        <tr class="${classCombustivel}">
+                            <td>${new Date(d.data).toLocaleDateString('pt-BR')}</td>
+                            <td>${emoji} ${d.tipo}</td>
+                            <td>${d.descricao}</td>
+                            <td><strong style="color: #ff6b6b;">${formatarMoeda(d.valor)}</strong></td>
+                            <td class="table-actions">
+                                <button class="btn btn-danger btn-small" onclick="removerDespesaVariavel(${d.id})">Remover</button>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+        }
+
+        // ==========================================
+        // UTILIDADES
+        // ==========================================
+        function formatarMoeda(valor) {
+            return new Intl.NumberFormat('pt-BR', {
+                style: 'currency',
+                currency: 'BRL'
+            }).format(valor);
+        }
+    </script>
+</body>
+</html>

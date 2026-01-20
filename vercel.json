@@ -23,6 +23,10 @@
       ]
     },
     {
+      "source": "/fintech",
+      "destination": "/fintech/index.html"
+    },
+    {
       "source": "/(.*)",
       "destination": "/pitch-saude.html",
       "has": [
