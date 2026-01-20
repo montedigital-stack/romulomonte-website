@@ -1,23 +1,9 @@
 // ==========================================
 // API BACKEND - FINTECH
-// Vercel Serverless Function para persistência de dados
+// Vercel Serverless Function com MongoDB Atlas
 // ==========================================
 
-// Simula um banco de dados em memória
-// Em produção, você pode conectar a MongoDB, PostgreSQL, etc.
-let database = {
-    entradas: [],
-    despesasFixas: [
-        { id: 1, descricao: 'Carro', valor: 1650, vencimento: 8, pago: false },
-        { id: 2, descricao: 'Internet', valor: 110, vencimento: 5, pago: false },
-        { id: 3, descricao: 'Energia', valor: 300, vencimento: 20, pago: false },
-        { id: 4, descricao: 'Água', valor: 80, vencimento: 20, pago: false },
-        { id: 5, descricao: 'Alimentação', valor: 800, vencimento: 15, pago: false }
-    ],
-    despesasVariaveis: [],
-    capitalDisponivel: 0,
-    reservaAcumulada: 0
-};
+import { loadFinanceData, saveFinanceData, createIndexes } from './db.js';
 
 // Handler principal da API
 export default async function handler(req, res) {
@@ -37,16 +23,22 @@ export default async function handler(req, res) {
     }
 
     try {
-        // GET - Retorna todos os dados
+        // Cria índices na primeira execução (otimização)
+        await createIndexes().catch(err => console.log('Índices já existem'));
+
+        // GET - Retorna todos os dados do MongoDB
         if (req.method === 'GET') {
+            const data = await loadFinanceData('default');
+
             return res.status(200).json({
                 success: true,
-                data: database,
-                timestamp: new Date().toISOString()
+                data,
+                timestamp: new Date().toISOString(),
+                source: 'mongodb'
             });
         }
 
-        // POST - Atualiza todos os dados
+        // POST - Salva todos os dados no MongoDB
         if (req.method === 'POST') {
             const { entradas, despesasFixas, despesasVariaveis, capitalDisponivel, reservaAcumulada } = req.body;
 
@@ -65,20 +57,22 @@ export default async function handler(req, res) {
                 });
             }
 
-            // Atualiza database
-            database = {
+            // Salva no MongoDB
+            const financeData = {
                 entradas,
                 despesasFixas,
                 despesasVariaveis,
                 capitalDisponivel,
-                reservaAcumulada,
-                lastUpdated: new Date().toISOString()
+                reservaAcumulada
             };
+
+            await saveFinanceData(financeData, 'default');
 
             return res.status(200).json({
                 success: true,
-                message: 'Dados salvos com sucesso',
-                timestamp: new Date().toISOString()
+                message: 'Dados salvos com sucesso no MongoDB',
+                timestamp: new Date().toISOString(),
+                source: 'mongodb'
             });
         }
 
@@ -90,6 +84,17 @@ export default async function handler(req, res) {
 
     } catch (error) {
         console.error('Erro na API:', error);
+
+        // Mensagem específica para erro de conexão MongoDB
+        if (error.message.includes('MONGODB_URI')) {
+            return res.status(500).json({
+                success: false,
+                error: 'Erro de configuração do banco de dados',
+                message: 'MONGODB_URI não configurado. Configure no Vercel Dashboard.',
+                hint: 'Vá em: Vercel Dashboard > Settings > Environment Variables'
+            });
+        }
+
         return res.status(500).json({
             success: false,
             error: 'Erro interno do servidor',

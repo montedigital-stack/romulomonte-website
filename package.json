@@ -1,0 +1,21 @@
+{
+  "name": "romulo-monte-lp",
+  "version": "1.0.0",
+  "description": "Landing page e sistema fintech - Romulo Monte",
+  "main": "index.html",
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "echo 'No build needed'",
+    "deploy": "vercel --prod"
+  },
+  "keywords": [
+    "fintech",
+    "financial",
+    "capital-de-giro"
+  ],
+  "author": "Romulo Monte",
+  "license": "MIT",
+  "dependencies": {
+    "mongodb": "^6.3.0"
+  }
+}

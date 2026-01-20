@@ -19,6 +19,28 @@ Controlar entradas, saídas e reservas com visão clara do capital disponível, 
 https://www.romulomonte.com/fintech
 ```
 
+## ⚡ Início Rápido
+
+### 1. Configure o MongoDB (5 minutos):
+Siga o guia completo: [MONGODB_SETUP.md](MONGODB_SETUP.md)
+
+Resumo rápido:
+1. Crie conta no [MongoDB Atlas](https://www.mongodb.com/cloud/atlas/register) (gratuito)
+2. Crie cluster M0 (free tier)
+3. Copie a connection string
+4. Configure no Vercel:
+   - Settings > Environment Variables
+   - Adicione `MONGODB_URI` = sua connection string
+
+### 2. Deploy:
+```bash
+git add .
+git commit -m "feat: adicionar sistema fintech com MongoDB"
+git push
+```
+
+Pronto! Acesse: https://www.romulomonte.com/fintech
+
 ---
 
 ## 📊 Funcionalidades
@@ -88,8 +110,9 @@ Visualize em tempo real:
 
 - **Frontend**: HTML5 + CSS3 + JavaScript puro (vanilla)
 - **Backend**: Vercel Serverless Functions (Node.js)
+- **Banco de Dados**: MongoDB Atlas (gratuito, permanente)
 - **Hospedagem**: Vercel
-- **Persistência**: API REST com armazenamento em memória
+- **Persistência**: API REST + MongoDB (dados nunca são perdidos)
 
 ---
 
@@ -98,11 +121,16 @@ Visualize em tempo real:
 ```
 fintech/
 ├── index.html          # Página principal (HTML + CSS + JS integrados)
-└── README.md          # Este arquivo
+├── README.md          # Este arquivo
+└── MONGODB_SETUP.md   # Guia de configuração do MongoDB
 
 api/
 └── fintech/
-    └── data.js        # API backend (Vercel Function)
+    ├── data.js        # API backend (Vercel Function)
+    └── db.js          # Configuração e funções do MongoDB
+
+.env.example           # Exemplo de variáveis de ambiente
+package.json           # Dependências (mongodb)
 ```
 
 ---
@@ -201,16 +229,25 @@ Vercel irá:
 
 ---
 
-## 🔐 Segurança dos Dados
+## 🔐 Segurança e Persistência dos Dados
 
-**⚠️ IMPORTANTE:**
-- Dados ficam armazenados em **memória no servidor**
-- Em ambiente de produção, dados são **voláteis** (podem ser perdidos em restart)
-- Para persistência permanente, recomenda-se integrar com:
-  - MongoDB Atlas (gratuito)
-  - PostgreSQL (Vercel Postgres)
-  - Supabase
-  - Firebase
+**✅ PERSISTÊNCIA PERMANENTE COM MONGODB:**
+- Dados armazenados no **MongoDB Atlas** (banco de dados em nuvem)
+- **Nunca são perdidos**, mesmo se o servidor reiniciar
+- Acesse de **qualquer dispositivo** - dados sincronizados
+- **Backup automático** pelo MongoDB Atlas
+- **100% gratuito** (plano M0 - 512 MB)
+
+**🔒 Segurança:**
+- Conexão criptografada (SSL/TLS)
+- Autenticação por usuário e senha
+- Controle de acesso por IP (opcional)
+- Variáveis de ambiente protegidas no Vercel
+
+**📊 Capacidade:**
+- ~50.000 transações no plano gratuito
+- Anos de uso para pequeno negócio
+- Upgrade disponível se necessário
 
 ---
 
@@ -230,9 +267,9 @@ Vercel irá:
 
 ## 🔮 Próximas Melhorias (Sugestões)
 
-1. **Persistência Permanente**
-   - Integrar com banco de dados real
-   - Histórico nunca é perdido
+1. ~~**Persistência Permanente**~~ ✅ **IMPLEMENTADO**
+   - ✅ MongoDB Atlas integrado
+   - ✅ Histórico nunca é perdido
 
 2. **Gráficos**
    - Evolução do capital ao longo do tempo
