@@ -4,7 +4,6 @@
   "description": "Landing page e sistema fintech - Romulo Monte",
   "main": "index.html",
   "scripts": {
-    "dev": "vercel dev",
     "build": "echo 'No build needed'",
     "deploy": "vercel --prod"
   },
