@@ -811,6 +811,14 @@
                         </select>
                     </div>
 
+                    <!-- Campos para nova categoria -->
+                    <div id="novaCatGroup" style="display:none;">
+                        <div class="form-group">
+                            <label class="form-label">Nome da categoria</label>
+                            <input type="text" class="form-input" id="addNovaCatNome" placeholder="Ex: Frutas para casa">
+                        </div>
+                    </div>
+
                     <!-- Descricao customizada -->
                     <div class="form-group" id="descricaoGroup" style="display:none;">
                         <label class="form-label">Descricao</label>
@@ -867,7 +875,7 @@
         // ==========================================
         // CATEGORIAS COM COR E TIPO PADRAO
         // ==========================================
-        const CATEGORIAS = [
+        const CATEGORIAS_PADRAO = [
             // Amarelo - Carro/Mobilidade
             { id: 'carro_mensalidade', nome: 'Carro - Mensalidade', tipo: 'saida', cor: 'amarelo' },
             { id: 'combustivel', nome: 'Combustivel', tipo: 'saida', cor: 'amarelo' },
@@ -901,17 +909,23 @@
 
             // Preto - Anotacao
             { id: 'anotacao', nome: 'Anotacao', tipo: 'entrada', cor: 'preto' },
-        ].sort((a, b) => a.nome.localeCompare(b.nome));
+        ];
+
+        // Todas as categorias (padrao + personalizadas) - atualizado ao carregar dados
+        function getAllCategorias() {
+            return [...CATEGORIAS_PADRAO, ...state.categoriasCustom].sort((a, b) => a.nome.localeCompare(b.nome));
+        }
 
         // ==========================================
         // STATE
         // ==========================================
         let state = {
             transacoes: [],
+            categoriasCustom: [],
             semanaAtual: getCurrentWeek(),
             capitalDisponivel: 0,
             reservaAcumulada: 0,
-            // Legacy: keep old arrays for migration
+            // Legacy
             entradas: [],
             despesasFixas: [],
             despesasVariaveis: []
@@ -958,6 +972,7 @@
                         state = {
                             ...state,
                             transacoes: result.data.transacoes || [],
+                            categoriasCustom: result.data.categoriasCustom || [],
                             capitalDisponivel: result.data.capitalDisponivel || 0,
                             reservaAcumulada: result.data.reservaAcumulada || 0,
                             entradas: result.data.entradas || [],
@@ -1212,7 +1227,7 @@
         }
 
         function renderTxCard(t) {
-            const cat = CATEGORIAS.find(c => c.id === t.categoria);
+            const cat = getAllCategorias().find(c => c.id === t.categoria);
             const desc = t.descricao || (cat ? cat.nome : '');
             return `
                 <div class="tx-card" data-cor="${t.cor || 'preto'}" data-id="${t.id}"
@@ -1266,6 +1281,7 @@
             document.getElementById('addData').value = modalState.defaultDate;
             document.getElementById('addValor').value = '';
             document.getElementById('descricaoGroup').style.display = 'none';
+            document.getElementById('novaCatGroup').style.display = 'none';
 
             // Set tipo toggle
             setTipo(modalState.tipo);
@@ -1301,29 +1317,36 @@
 
         function populateCategorias() {
             const select = document.getElementById('addCategoria');
-            const filtered = CATEGORIAS.filter(c => c.tipo === modalState.tipo);
+            const todas = getAllCategorias();
+            const filtered = todas.filter(c => c.tipo === modalState.tipo);
+            // Incluir tambem categorias que servem para ambos os tipos
+            const ambos = todas.filter(c => c.tipo === 'ambos');
+            const lista = [...filtered, ...ambos].sort((a, b) => a.nome.localeCompare(b.nome));
             select.innerHTML = '<option value="">Selecione...</option>';
-            filtered.forEach(c => {
-                select.innerHTML += `<option value="${c.id}" data-cor="${c.cor}">${c.nome}</option>`;
+            lista.forEach(c => {
+                const isCustom = state.categoriasCustom.some(cc => cc.id === c.id);
+                select.innerHTML += `<option value="${c.id}" data-cor="${c.cor}">${c.nome}${isCustom ? ' *' : ''}</option>`;
             });
-            // Adicionar opcao "Outro"
-            select.innerHTML += '<option value="outro">+ Adicionar novo</option>';
+            select.innerHTML += '<option value="novo">+ Nova categoria</option>';
         }
 
         function onCategoriaChange() {
             const select = document.getElementById('addCategoria');
             const val = select.value;
+            const novaCatGroup = document.getElementById('novaCatGroup');
             const descGroup = document.getElementById('descricaoGroup');
 
-            if (val === 'outro') {
-                descGroup.style.display = 'block';
+            if (val === 'novo') {
+                novaCatGroup.style.display = 'block';
+                descGroup.style.display = 'none';
                 return;
             }
 
+            novaCatGroup.style.display = 'none';
             descGroup.style.display = 'none';
 
             // Auto-set cor
-            const cat = CATEGORIAS.find(c => c.id === val);
+            const cat = getAllCategorias().find(c => c.id === val);
             if (cat) {
                 setCor(cat.cor);
             }
@@ -1375,8 +1398,27 @@
                 return;
             }
 
-            const cat = CATEGORIAS.find(c => c.id === categoriaId);
-            const nome = categoriaId === 'outro' ? descricao : (cat ? cat.nome : descricao);
+            // Criar nova categoria personalizada se selecionou "novo"
+            let catIdFinal = categoriaId;
+            if (categoriaId === 'novo') {
+                const novaCatNome = document.getElementById('addNovaCatNome').value.trim();
+                if (!novaCatNome) {
+                    showToast('Informe o nome da categoria');
+                    return;
+                }
+                const novoId = 'custom_' + Date.now();
+                const novaCat = {
+                    id: novoId,
+                    nome: novaCatNome,
+                    tipo: modalState.tipo,
+                    cor: modalState.cor
+                };
+                state.categoriasCustom.push(novaCat);
+                catIdFinal = novoId;
+            }
+
+            const cat = getAllCategorias().find(c => c.id === catIdFinal);
+            const nome = cat ? cat.nome : descricao;
 
             if (modalState.editId) {
                 // Editar existente
@@ -1385,7 +1427,7 @@
                     state.transacoes[idx] = {
                         ...state.transacoes[idx],
                         tipo: modalState.tipo,
-                        categoria: categoriaId,
+                        categoria: catIdFinal,
                         descricao: nome,
                         valor,
                         data,
@@ -1398,7 +1440,7 @@
                 state.transacoes.push({
                     id: Date.now(),
                     tipo: modalState.tipo,
-                    categoria: categoriaId,
+                    categoria: catIdFinal,
                     descricao: nome,
                     valor,
                     data,
