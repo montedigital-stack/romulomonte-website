@@ -279,14 +279,14 @@
             color: var(--text-primary);
             transition: var(--transition);
         }
-        .week-item.current .week-number {
+        .week-item.selected .week-number {
             width: 52px;
             height: 52px;
             background: var(--highlight);
             font-size: 24px;
             font-weight: 900;
         }
-        .week-item.future .week-number {
+        .week-item.future:not(.selected) .week-number {
             color: var(--text-muted);
         }
         .week-status {
@@ -1085,13 +1085,14 @@
 
             let html = '';
             for (let w = startWeek; w < startWeek + totalWeeks; w++) {
-                const isCurrent = w === currentWeek;
+                const isSelected = w === state.semanaAtual;
                 const isPast = w < currentWeek;
                 const isFuture = w > currentWeek;
 
                 let statusIcon = '';
-                if (isPast) {
-                    // Verifica se a semana tem dados
+                if (isSelected) {
+                    statusIcon = '';
+                } else if (isPast) {
                     const weekDates = getWeekDates(w, CONFIG.ANO);
                     const hasData = state.transacoes.some(t => {
                         const td = new Date(t.data);
@@ -1103,7 +1104,7 @@
                 }
 
                 html += `
-                    <div class="week-item ${isCurrent ? 'current' : ''} ${isFuture ? 'future' : ''} ${isPast ? 'past' : ''}"
+                    <div class="week-item ${isSelected ? 'selected' : ''} ${isFuture && !isSelected ? 'future' : ''} ${isPast && !isSelected ? 'past' : ''}"
                          onclick="selectWeek(${w})">
                         <div class="week-number">${w}</div>
                         <div class="week-status">${statusIcon}</div>
