@@ -7,8 +7,9 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Aquitio">
-    <link rel="apple-touch-icon" href="/fintech/logo-business@3x.png">
-    <link rel="icon" type="image/png" href="/fintech/logo-business@3x.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/fintech/adaptive-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/fintech/favicon.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/fintech/favicon.png">
     <title>Financeiro 2026 - Aquitio</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
@@ -538,6 +539,35 @@
         .tipo-btn.entrada.active { color: var(--entrada-color); }
         .tipo-btn.saida.active { color: var(--saida-color); }
 
+        .cor-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        .cor-chip {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 2px solid transparent;
+            color: white;
+        }
+        .cor-chip.selected {
+            border-color: var(--text-primary);
+            transform: scale(1.05);
+        }
+        .cor-chip[data-cor="amarelo"] { background: var(--cat-amarelo); color: var(--text-primary); }
+        .cor-chip[data-cor="vermelho"] { background: var(--cat-vermelho); }
+        .cor-chip[data-cor="azul"] { background: var(--cat-azul); }
+        .cor-chip[data-cor="verde"] { background: var(--cat-verde); }
+        .cor-chip[data-cor="preto"] { background: var(--cat-preto); }
+
         .cor-options { display: flex; gap: 8px; }
         .cor-option {
             width: 32px;
@@ -761,6 +791,13 @@
                         <select class="form-select" id="addCategoria" onchange="onCategoriaChange()">
                             <option value="">Selecione...</option>
                         </select>
+                        <div class="cor-chips" id="corChips">
+                            <div class="cor-chip" data-cor="amarelo" onclick="setCor('amarelo')">eu & carro</div>
+                            <div class="cor-chip" data-cor="vermelho" onclick="setCor('vermelho')">casa & familia</div>
+                            <div class="cor-chip selected" data-cor="azul" onclick="setCor('azul')">Chinelos</div>
+                            <div class="cor-chip" data-cor="verde" onclick="setCor('verde')">Aquitio</div>
+                            <div class="cor-chip" data-cor="preto" onclick="setCor('preto')">outros</div>
+                        </div>
                     </div>
 
                     <div id="novaCatGroup" style="display:none;">
@@ -775,7 +812,7 @@
                         <input type="text" inputmode="numeric" class="form-input form-input-valor" id="addValor" placeholder="R$ 0,00" autocomplete="off">
                     </div>
 
-                    <div class="form-row-3">
+                    <div class="form-row">
                         <div class="form-group">
                             <label class="form-label">Data</label>
                             <input type="date" class="form-input" id="addData">
@@ -783,16 +820,6 @@
                         <div class="form-group">
                             <label class="form-label">Qtd Pares</label>
                             <input type="number" class="form-input" id="addQtdPares" placeholder="0" min="0">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Cor</label>
-                            <div class="cor-options" id="corOptions">
-                                <div class="cor-option" data-cor="amarelo" onclick="setCor('amarelo')"></div>
-                                <div class="cor-option" data-cor="vermelho" onclick="setCor('vermelho')"></div>
-                                <div class="cor-option selected" data-cor="azul" onclick="setCor('azul')"></div>
-                                <div class="cor-option" data-cor="verde" onclick="setCor('verde')"></div>
-                                <div class="cor-option" data-cor="preto" onclick="setCor('preto')"></div>
-                            </div>
                         </div>
                     </div>
 
@@ -1192,8 +1219,9 @@
 
         function setCor(cor) {
             modalState.cor = cor;
-            document.querySelectorAll('.cor-option').forEach(o => o.classList.remove('selected'));
-            document.querySelector(`.cor-option[data-cor="${cor}"]`).classList.add('selected');
+            document.querySelectorAll('.cor-chip').forEach(o => o.classList.remove('selected'));
+            const chip = document.querySelector(`.cor-chip[data-cor="${cor}"]`);
+            if (chip) chip.classList.add('selected');
         }
 
         function populateCategorias() {
