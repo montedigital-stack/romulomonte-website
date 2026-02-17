@@ -31,6 +31,8 @@ export async function connectToDatabase() {
         minPoolSize: 2,
         maxIdleTimeMS: 30000,
         serverSelectionTimeoutMS: 5000,
+        tls: true,
+        tlsAllowInvalidCertificates: false,
     });
 
     const db = client.db('fintech'); // Nome do banco de dados
