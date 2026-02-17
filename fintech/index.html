@@ -14,6 +14,69 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 
+        /* AUTH SCREEN */
+        .auth-screen {
+            position: fixed;
+            inset: 0;
+            background: var(--bg);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 6000;
+            gap: 24px;
+        }
+        .auth-screen.hidden { display: none; }
+        .auth-logo { height: 64px; }
+        .auth-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        .auth-pin-display {
+            display: flex;
+            gap: 12px;
+            margin: 16px 0;
+        }
+        .auth-pin-dot {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--text-muted);
+            transition: all 0.15s ease;
+        }
+        .auth-pin-dot.filled { background: var(--text-primary); }
+        .auth-pin-dot.error { background: var(--saida-color); animation: shake 0.3s ease; }
+        .auth-keypad {
+            display: grid;
+            grid-template-columns: repeat(3, 72px);
+            gap: 12px;
+            margin-top: 8px;
+        }
+        .auth-key {
+            width: 72px;
+            height: 72px;
+            border: none;
+            border-radius: 50%;
+            background: var(--card);
+            font-size: 28px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-primary);
+        }
+        .auth-key:active { transform: scale(0.95); background: var(--card-hover); }
+        .auth-key.empty { background: transparent; cursor: default; }
+        .auth-key.delete { font-size: 20px; }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
         :root {
             --bg: #e8e8e8;
             --bg-sidebar: #e0e0e0;
@@ -686,7 +749,33 @@
     </style>
 </head>
 <body>
-    <div class="loading-overlay" id="loadingOverlay">
+    <!-- AUTH SCREEN -->
+    <div class="auth-screen" id="authScreen">
+        <img src="/fintech/logo-business@3x.png" alt="Aquitio" class="auth-logo">
+        <div class="auth-title">Digite seu PIN</div>
+        <div class="auth-pin-display" id="pinDisplay">
+            <div class="auth-pin-dot"></div>
+            <div class="auth-pin-dot"></div>
+            <div class="auth-pin-dot"></div>
+            <div class="auth-pin-dot"></div>
+        </div>
+        <div class="auth-keypad" id="authKeypad">
+            <button class="auth-key" data-key="1">1</button>
+            <button class="auth-key" data-key="2">2</button>
+            <button class="auth-key" data-key="3">3</button>
+            <button class="auth-key" data-key="4">4</button>
+            <button class="auth-key" data-key="5">5</button>
+            <button class="auth-key" data-key="6">6</button>
+            <button class="auth-key" data-key="7">7</button>
+            <button class="auth-key" data-key="8">8</button>
+            <button class="auth-key" data-key="9">9</button>
+            <button class="auth-key empty"></button>
+            <button class="auth-key" data-key="0">0</button>
+            <button class="auth-key delete" data-key="delete">&#9003;</button>
+        </div>
+    </div>
+
+    <div class="loading-overlay" id="loadingOverlay" style="display:none;">
         <img src="/fintech/logo-business@3x.png" alt="Aquitio">
         <div class="loading-spinner"></div>
     </div>
@@ -839,9 +928,186 @@
         const CONFIG = {
             API_URL: '/api/fintech/data',
             STORAGE_KEY: 'fintech_v4',
+            STORAGE_KEY_OLD: 'fintech_data_v3',
             ANO: 2026,
-            META_PARES_MES: 100
+            META_PARES_MES: 100,
+            PIN_HASH: '8526' // PIN: 8526 - mude para seu PIN preferido
         };
+
+        // ==========================================
+        // AUTENTICACAO PIN
+        // ==========================================
+        let authPin = '';
+        let isAuthenticated = false;
+
+        function initAuth() {
+            // Verifica se já está autenticado na sessão
+            if (sessionStorage.getItem('fintech_auth') === 'true') {
+                isAuthenticated = true;
+                hideAuthScreen();
+                return;
+            }
+
+            // Setup keypad
+            const keypad = document.getElementById('authKeypad');
+            keypad.addEventListener('click', function(e) {
+                const key = e.target.closest('.auth-key');
+                if (!key) return;
+
+                const keyVal = key.dataset.key;
+                if (!keyVal) return;
+
+                if (keyVal === 'delete') {
+                    authPin = authPin.slice(0, -1);
+                } else if (authPin.length < 4) {
+                    authPin += keyVal;
+                }
+
+                updatePinDisplay();
+
+                if (authPin.length === 4) {
+                    checkPin();
+                }
+            });
+        }
+
+        function updatePinDisplay() {
+            const dots = document.querySelectorAll('.auth-pin-dot');
+            dots.forEach((dot, i) => {
+                dot.classList.remove('filled', 'error');
+                if (i < authPin.length) {
+                    dot.classList.add('filled');
+                }
+            });
+        }
+
+        function checkPin() {
+            if (authPin === CONFIG.PIN_HASH) {
+                isAuthenticated = true;
+                sessionStorage.setItem('fintech_auth', 'true');
+                hideAuthScreen();
+            } else {
+                // PIN errado - mostrar erro
+                const dots = document.querySelectorAll('.auth-pin-dot');
+                dots.forEach(dot => dot.classList.add('error'));
+
+                // Usar requestAnimationFrame em vez de setTimeout com string
+                requestAnimationFrame(function() {
+                    requestAnimationFrame(function() {
+                        // Aguarda ~300ms para animação
+                        let start = performance.now();
+                        function waitAndReset(timestamp) {
+                            if (timestamp - start >= 300) {
+                                authPin = '';
+                                updatePinDisplay();
+                            } else {
+                                requestAnimationFrame(waitAndReset);
+                            }
+                        }
+                        requestAnimationFrame(waitAndReset);
+                    });
+                });
+            }
+        }
+
+        function hideAuthScreen() {
+            document.getElementById('authScreen').classList.add('hidden');
+            document.getElementById('loadingOverlay').style.display = 'flex';
+            initApp();
+        }
+
+        // ==========================================
+        // MIGRACAO DE DADOS V3 -> V4
+        // ==========================================
+        function migrateFromV3() {
+            const v3Data = localStorage.getItem(CONFIG.STORAGE_KEY_OLD);
+            const v4Data = localStorage.getItem(CONFIG.STORAGE_KEY);
+
+            // Se V3 existe e V4 está vazia ou não existe
+            if (v3Data) {
+                try {
+                    const v3 = JSON.parse(v3Data);
+                    const v4 = v4Data ? JSON.parse(v4Data) : null;
+
+                    // Só migra se V4 estiver vazia (sem transacoes)
+                    if (!v4 || !v4.transacoes || v4.transacoes.length === 0) {
+                        console.log('Migrando dados de V3 para V4...');
+
+                        // Converter estrutura V3 para V4
+                        const migratedData = {
+                            transacoes: [],
+                            categoriasCustom: v3.categoriasCustom || [],
+                            semanaAtual: getCurrentWeek(),
+                            capitalDisponivel: v3.capitalDisponivel || 0,
+                            reservaAcumulada: v3.reservaAcumulada || 0
+                        };
+
+                        // Migrar entradas antigas (se existirem)
+                        if (v3.entradas && Array.isArray(v3.entradas)) {
+                            v3.entradas.forEach(e => {
+                                migratedData.transacoes.push({
+                                    id: e.id || Date.now() + Math.random(),
+                                    tipo: 'entrada',
+                                    categoria: e.categoria || 'venda_chinelas',
+                                    descricao: e.descricao || e.nome || '',
+                                    valor: e.valor || 0,
+                                    data: e.data || formatDateStr(new Date()),
+                                    cor: e.cor || 'azul',
+                                    qtdPares: e.qtdPares || 0,
+                                    repete: e.repete || false
+                                });
+                            });
+                        }
+
+                        // Migrar despesas variaveis (se existirem)
+                        if (v3.despesasVariaveis && Array.isArray(v3.despesasVariaveis)) {
+                            v3.despesasVariaveis.forEach(d => {
+                                migratedData.transacoes.push({
+                                    id: d.id || Date.now() + Math.random(),
+                                    tipo: 'saida',
+                                    categoria: d.categoria || 'anotacao',
+                                    descricao: d.descricao || d.nome || '',
+                                    valor: d.valor || 0,
+                                    data: d.data || formatDateStr(new Date()),
+                                    cor: d.cor || 'preto',
+                                    qtdPares: 0,
+                                    repete: d.repete || false
+                                });
+                            });
+                        }
+
+                        // Migrar transacoes se já existirem no formato novo dentro de V3
+                        if (v3.transacoes && Array.isArray(v3.transacoes)) {
+                            v3.transacoes.forEach(t => {
+                                migratedData.transacoes.push({
+                                    id: t.id || Date.now() + Math.random(),
+                                    tipo: t.tipo || 'entrada',
+                                    categoria: t.categoria || '',
+                                    descricao: t.descricao || '',
+                                    valor: t.valor || 0,
+                                    data: t.data || formatDateStr(new Date()),
+                                    cor: t.cor || 'preto',
+                                    qtdPares: t.qtdPares || 0,
+                                    repete: t.repete || false
+                                });
+                            });
+                        }
+
+                        // Salvar V4 migrado
+                        localStorage.setItem(CONFIG.STORAGE_KEY, JSON.stringify(migratedData));
+
+                        // Remover V3
+                        localStorage.removeItem(CONFIG.STORAGE_KEY_OLD);
+
+                        console.log('Migracao concluida:', migratedData.transacoes.length, 'transacoes');
+                        return migratedData;
+                    }
+                } catch (e) {
+                    console.error('Erro na migracao:', e);
+                }
+            }
+            return null;
+        }
 
         const CATEGORIAS_PADRAO = [
             { id: 'carro_mensalidade', nome: 'Carro - Mensalidade', tipo: 'saida', cor: 'amarelo' },
@@ -885,18 +1151,32 @@
             defaultDate: null
         };
 
-        // INIT
-        document.addEventListener('DOMContentLoaded', async () => {
+        // INIT - Primeiro autentica, depois carrega
+        document.addEventListener('DOMContentLoaded', function() {
+            initAuth();
+        });
+
+        async function initApp() {
+            // Tenta migrar dados V3 para V4 antes de carregar
+            migrateFromV3();
+
             await carregarDados();
             renderWeeks();
             renderDays();
             renderDashboard();
             setupValorInput();
 
-            setTimeout(() => {
-                document.getElementById('loadingOverlay').style.display = 'none';
-            }, 400);
-        });
+            // Esconder loading após 400ms usando requestAnimationFrame
+            let start = performance.now();
+            function hideLoading(timestamp) {
+                if (timestamp - start >= 400) {
+                    document.getElementById('loadingOverlay').style.display = 'none';
+                } else {
+                    requestAnimationFrame(hideLoading);
+                }
+            }
+            requestAnimationFrame(hideLoading);
+        }
 
         // PERSISTENCIA - MongoDB como fonte unica
         async function carregarDados() {
@@ -1399,10 +1679,26 @@
             toast.className = 'toast';
             toast.textContent = msg;
             container.appendChild(toast);
-            setTimeout(() => {
-                toast.style.opacity = '0';
-                setTimeout(() => toast.remove(), 300);
-            }, 2500);
+
+            // Usar requestAnimationFrame para evitar setTimeout com possivel CSP issue
+            let startTime = performance.now();
+            function fadeOut(timestamp) {
+                if (timestamp - startTime >= 2500) {
+                    toast.style.opacity = '0';
+                    let fadeStart = performance.now();
+                    function removeToast(ts) {
+                        if (ts - fadeStart >= 300) {
+                            toast.remove();
+                        } else {
+                            requestAnimationFrame(removeToast);
+                        }
+                    }
+                    requestAnimationFrame(removeToast);
+                } else {
+                    requestAnimationFrame(fadeOut);
+                }
+            }
+            requestAnimationFrame(fadeOut);
         }
     </script>
 </body>
