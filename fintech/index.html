@@ -1178,9 +1178,19 @@
             requestAnimationFrame(hideLoading);
         }
 
-        // PERSISTENCIA - MongoDB como fonte unica
+        // PERSISTENCIA - Sincronizacao inteligente entre MongoDB e localStorage
         async function carregarDados() {
-            // Sempre tentar carregar do MongoDB primeiro
+            // Primeiro, carregar dados locais (se existirem)
+            let localData = null;
+            const localStr = localStorage.getItem(CONFIG.STORAGE_KEY);
+            if (localStr) {
+                try {
+                    localData = JSON.parse(localStr);
+                } catch (e) {}
+            }
+
+            // Tentar carregar do MongoDB
+            let mongoData = null;
             try {
                 const response = await fetch(CONFIG.API_URL, {
                     method: 'GET',
@@ -1190,36 +1200,63 @@
                 if (response.ok) {
                     const result = await response.json();
                     if (result.success && result.data) {
-                        state = {
-                            ...state,
-                            transacoes: result.data.transacoes || [],
-                            categoriasCustom: result.data.categoriasCustom || [],
-                            capitalDisponivel: result.data.capitalDisponivel || 0,
-                            reservaAcumulada: result.data.reservaAcumulada || 0
-                        };
-                        localStorage.setItem(CONFIG.STORAGE_KEY, JSON.stringify(state));
-                        console.log('Dados carregados do MongoDB:', state.transacoes.length, 'transacoes');
-                        return;
+                        mongoData = result.data;
                     }
                 }
             } catch (e) {
                 console.log('Erro ao carregar do MongoDB:', e.message);
             }
 
-            // Fallback: localStorage
-            const local = localStorage.getItem(CONFIG.STORAGE_KEY);
-            if (local) {
-                try {
-                    const parsed = JSON.parse(local);
-                    state = { ...state, ...parsed };
-                    console.log('Dados carregados do localStorage');
-                } catch (e) {}
+            // Logica de merge inteligente
+            const localTx = localData?.transacoes?.length || 0;
+            const mongoTx = mongoData?.transacoes?.length || 0;
+
+            console.log(`Local: ${localTx} transacoes, MongoDB: ${mongoTx} transacoes`);
+
+            if (mongoTx > 0 && mongoTx >= localTx) {
+                // MongoDB tem dados e tem mais ou igual ao local - usar MongoDB
+                state = {
+                    ...state,
+                    transacoes: mongoData.transacoes || [],
+                    categoriasCustom: mongoData.categoriasCustom || [],
+                    capitalDisponivel: mongoData.capitalDisponivel || 0,
+                    reservaAcumulada: mongoData.reservaAcumulada || 0
+                };
+                localStorage.setItem(CONFIG.STORAGE_KEY, JSON.stringify(state));
+                console.log('Usando dados do MongoDB');
+            } else if (localTx > 0) {
+                // Local tem dados e MongoDB está vazio ou tem menos - usar local e sincronizar
+                state = {
+                    ...state,
+                    transacoes: localData.transacoes || [],
+                    categoriasCustom: localData.categoriasCustom || [],
+                    capitalDisponivel: localData.capitalDisponivel || 0,
+                    reservaAcumulada: localData.reservaAcumulada || 0
+                };
+                console.log('Usando dados locais e sincronizando com MongoDB...');
+                // Sincronizar com MongoDB em background
+                await salvarDados();
+            } else if (mongoData) {
+                // Ambos vazios mas MongoDB respondeu - usar estrutura do MongoDB
+                state = {
+                    ...state,
+                    transacoes: [],
+                    categoriasCustom: mongoData.categoriasCustom || [],
+                    capitalDisponivel: mongoData.capitalDisponivel || 0,
+                    reservaAcumulada: mongoData.reservaAcumulada || 0
+                };
+                localStorage.setItem(CONFIG.STORAGE_KEY, JSON.stringify(state));
+                console.log('Iniciando com dados vazios do MongoDB');
             }
+            // Se nenhum dado disponivel, mantém state inicial
         }
 
         async function salvarDados() {
+            // Sempre salvar localmente primeiro
             localStorage.setItem(CONFIG.STORAGE_KEY, JSON.stringify(state));
+            console.log('Dados salvos localmente:', state.transacoes.length, 'transacoes');
 
+            // Tentar sincronizar com MongoDB
             try {
                 const response = await fetch(CONFIG.API_URL, {
                     method: 'POST',
@@ -1231,8 +1268,16 @@
                         reservaAcumulada: state.reservaAcumulada
                     })
                 });
+
                 if (response.ok) {
-                    console.log('Dados salvos no MongoDB');
+                    const result = await response.json();
+                    if (result.success) {
+                        console.log('Dados sincronizados com MongoDB');
+                    } else {
+                        console.warn('MongoDB retornou erro:', result.error);
+                    }
+                } else {
+                    console.warn('Falha ao salvar no MongoDB, status:', response.status);
                 }
             } catch (e) {
                 console.log('Erro ao salvar no MongoDB:', e.message);
