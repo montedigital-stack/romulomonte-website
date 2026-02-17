@@ -25,15 +25,33 @@ export async function connectToDatabase() {
         );
     }
 
-    // Cria nova conexão
-    const client = await MongoClient.connect(process.env.MONGODB_URI, {
-        maxPoolSize: 10, // Pool de conexões
-        minPoolSize: 2,
+    // Cria nova conexão com retry
+    const options = {
+        maxPoolSize: 10,
+        minPoolSize: 1,
         maxIdleTimeMS: 30000,
-        serverSelectionTimeoutMS: 5000,
-        tls: true,
-        tlsAllowInvalidCertificates: false,
-    });
+        serverSelectionTimeoutMS: 10000,
+        connectTimeoutMS: 10000,
+        retryWrites: true,
+        retryReads: true,
+    };
+
+    let client;
+    let attempts = 0;
+    const maxAttempts = 3;
+
+    while (attempts < maxAttempts) {
+        try {
+            client = await MongoClient.connect(process.env.MONGODB_URI, options);
+            break;
+        } catch (err) {
+            attempts++;
+            if (attempts >= maxAttempts) {
+                throw new Error(`Falha ao conectar ao MongoDB após ${maxAttempts} tentativas: ${err.message}`);
+            }
+            await new Promise(r => setTimeout(r, 1000 * attempts));
+        }
+    }
 
     const db = client.db('fintech'); // Nome do banco de dados
 
