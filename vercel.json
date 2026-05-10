@@ -39,6 +39,16 @@
       ]
     },
     {
+      "source": "/",
+      "destination": "/rian-slides/index.html",
+      "has": [
+        {
+          "type": "host",
+          "value": "rian.romulomonte.com"
+        }
+      ]
+    },
+    {
       "source": "/(.*)",
       "destination": "/rian-slides/index.html",
       "has": [
