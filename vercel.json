@@ -37,6 +37,16 @@
           "value": "saude.romulomonte.com"
         }
       ]
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/rian-slides.html",
+      "has": [
+        {
+          "type": "host",
+          "value": "rian.romulomonte.com"
+        }
+      ]
     }
   ]
 }
