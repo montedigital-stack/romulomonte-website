@@ -40,7 +40,7 @@
     },
     {
       "source": "/(.*)",
-      "destination": "/rian-slides.html",
+      "destination": "/rian-slides/index.html",
       "has": [
         {
           "type": "host",
