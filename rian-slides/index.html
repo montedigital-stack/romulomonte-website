@@ -269,7 +269,7 @@ html,body{width:100%;height:100%;background:var(--deep);
 
 .tool-img-wrap {
   width: 100%;
-  height: clamp(80px, 14vh, 140px);
+  height: clamp(130px, 22vh, 210px);
   overflow: hidden;
   background: rgba(0,0,0,0.4);
   flex-shrink: 0;
@@ -371,7 +371,7 @@ html,body{width:100%;height:100%;background:var(--deep);
       <div class="slide-title"><span class="hly">Superação</span> nível máximo</div>
       <div class="slide-body">
         Nasci com <strong>apraxia da fala</strong>. É uma condição que dificulta a comunicação.
-        Os médicos me trataram, minha família me apoiou — e eu decidi enfrentar isso do <em>meu jeito.</em>
+        Os médicos me trataram, minha família me apoiou e eu decidi enfrentar isso do <em>meu jeito.</em>
       </div>
       <div class="timeline">
         <div class="tl-node tl-n1"><div class="tl-icon">🔇</div>
@@ -502,7 +502,7 @@ html,body{width:100%;height:100%;background:var(--deep);
     </div>
 
     <!-- SLIDE 7 — FAMÍLIA -->
-    <div class="slide" data-label="Família">
+    <div class="slide" data-label="Família" data-hidden="true" style="display:none">
       <div class="slide-tag">// 07 · APOIO INCONDICIONAL</div>
       <div class="slide-title" style="margin-bottom:clamp(8px,1.5vh,16px);">
         Por trás de cada <span class="hlg">conquista,</span><br>uma <span class="hly">família.</span>
@@ -566,7 +566,7 @@ html,body{width:100%;height:100%;background:var(--deep);
 </div>
 
 <script>
-const slides=document.querySelectorAll(".slide");
+const slides=document.querySelectorAll(".slide:not([data-hidden])");
 const total=slides.length;
 let cur=0;
 const topbar=document.getElementById("topbar");
