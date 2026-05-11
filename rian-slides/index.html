@@ -535,34 +535,35 @@ html,body{width:100%;height:100%;background:var(--deep);
     </div>
 
     <!-- SLIDE 8 — FECHAMENTO + FAMÍLIA -->
-    <div class="slide" id="closing-slide" data-label="Fechamento" style="position:absolute;overflow:hidden;">
-      <div id="closing-bg" style="position:absolute;inset:0;z-index:0;background-size:cover;background-position:center 15%;background-repeat:no-repeat;"></div>
-      <div style="position:absolute;inset:0;z-index:1;background:linear-gradient(135deg,rgba(0,13,26,0.80) 0%,rgba(0,13,26,0.60) 100%);"></div>
-      <div class="closing-center" style="position:relative;z-index:2;">
-        <div class="big-star">⭐</div>
-        <div class="closing-name">Rian Monte</div>
-        <div class="closing-tagline">
-          "Estou pronto para aprender mais.<br>
-          E estou pronto pro <strong style="color:var(--cyan)">SESI.</strong>"
+    <div class="slide" data-label="Fechamento">
+      <div class="slide-tag">// 08 · ENCERRAMENTO</div>
+      <div class="two-col">
+        <!-- Foto da família -->
+        <div class="col-img" style="width:clamp(150px,26vw,300px);">
+          <img id="family-display-img" class="char-img" alt="Família Monte" style="border:1px solid var(--border);filter:drop-shadow(0 0 22px rgba(0,255,136,0.3));"/>
+          <div style="font-family:'Share Tech Mono',monospace;font-size:clamp(.42rem,.9vw,.6rem);color:rgba(255,255,255,.3);letter-spacing:2px;margin-top:8px;text-align:center;">FAMÍLIA MONTE · EVENTO DE AUTÓGRAFOS</div>
         </div>
-        <div style="display:flex;gap:clamp(8px,2vw,16px);flex-wrap:wrap;justify-content:center;">
-          <div style="background:var(--panel);border:1px solid var(--border);border-left:3px solid var(--cyan);border-radius:8px;padding:clamp(8px,1.4vh,14px) clamp(12px,2vw,20px);text-align:center;min-width:clamp(90px,14vw,130px);">
-            <div style="font-size:clamp(.9rem,2.2vw,1.5rem);">👨‍💻</div>
-            <div style="font-family:'Share Tech Mono',monospace;font-size:clamp(.48rem,1vw,.65rem);color:var(--cyan);letter-spacing:1px;margin-top:5px;">PAI DE TI</div>
+        <!-- Texto de fechamento -->
+        <div class="col-text">
+          <div class="closing-name" style="font-size:clamp(1.2rem,3.5vw,2.4rem);text-align:left;margin-bottom:clamp(6px,1.2vh,12px);">⭐ Rian Monte</div>
+          <div class="closing-tagline" style="text-align:left;font-size:clamp(.85rem,1.8vw,1.25rem);margin-bottom:clamp(10px,2vh,20px);">
+            "Estou pronto para aprender mais.<br>
+            E estou pronto pro <strong style="color:var(--cyan)">SESI.</strong>"
           </div>
-          <div style="background:var(--panel);border:1px solid var(--border);border-left:3px solid var(--green);border-radius:8px;padding:clamp(8px,1.4vh,14px) clamp(12px,2vw,20px);text-align:center;min-width:clamp(90px,14vw,130px);">
-            <div style="font-size:clamp(.9rem,2.2vw,1.5rem);">❤️</div>
-            <div style="font-family:'Share Tech Mono',monospace;font-size:clamp(.48rem,1vw,.65rem);color:var(--green);letter-spacing:1px;margin-top:5px;">FAMÍLIA PRESENTE</div>
+          <div style="display:flex;gap:clamp(8px,1.5vw,14px);flex-wrap:wrap;margin-bottom:clamp(12px,2vh,22px);">
+            <div style="background:var(--panel);border:1px solid var(--border);border-left:3px solid var(--green);border-radius:8px;padding:clamp(8px,1.2vh,12px) clamp(12px,1.8vw,18px);display:flex;align-items:center;gap:8px;">
+              <span style="font-size:clamp(.9rem,2vw,1.3rem);">❤️</span>
+              <span style="font-family:'Share Tech Mono',monospace;font-size:clamp(.45rem,.9vw,.62rem);color:var(--green);letter-spacing:1px;">FAMÍLIA PRESENTE</span>
+            </div>
+            <div style="background:var(--panel);border:1px solid var(--border);border-left:3px solid var(--yellow);border-radius:8px;padding:clamp(8px,1.2vh,12px) clamp(12px,1.8vw,18px);display:flex;align-items:center;gap:8px;">
+              <span style="font-size:clamp(.9rem,2vw,1.3rem);">🤝</span>
+              <span style="font-family:'Share Tech Mono',monospace;font-size:clamp(.45rem,.9vw,.62rem);color:var(--yellow);letter-spacing:1px;">PARCEIROS DO SESI</span>
+            </div>
           </div>
-          <div style="background:var(--panel);border:1px solid var(--border);border-left:3px solid var(--yellow);border-radius:8px;padding:clamp(8px,1.4vh,14px) clamp(12px,2vw,20px);text-align:center;min-width:clamp(90px,14vw,130px);">
-            <div style="font-size:clamp(.9rem,2.2vw,1.5rem);">🤝</div>
-            <div style="font-family:'Share Tech Mono',monospace;font-size:clamp(.48rem,1vw,.65rem);color:var(--yellow);letter-spacing:1px;margin-top:5px;">PARCEIROS DO SESI</div>
+          <div class="closing-badge" style="display:inline-block;">FLLC 2026 · POLO DE ROBÓTICA</div>
+          <div style="font-family:'Share Tech Mono',monospace;font-size:clamp(.42rem,.9vw,.62rem);color:rgba(255,255,255,.25);letter-spacing:2px;margin-top:clamp(6px,1vh,10px);">
+            MonteBall · @Rian_Monte · 4.000+ inscritos · Maceió/AL
           </div>
-        </div>
-        <div class="closing-badge">FLLC 2026 · POLO DE ROBÓTICA</div>
-        <div style="font-family:'Share Tech Mono',monospace;font-size:clamp(.48rem,1.1vw,.7rem);
-          color:rgba(255,255,255,.28);letter-spacing:3px;">
-          MonteBall · @Rian_Monte · 4.000+ inscritos · Maceió/AL
         </div>
       </div>
     </div>
@@ -627,9 +628,9 @@ document.addEventListener("touchend",e=>{
 },{passive:true});
 goTo(0);
 const familyPhoto = document.getElementById('family-photo');
-const closingBg = document.getElementById('closing-bg');
-if (familyPhoto && closingBg) {
-  closingBg.style.backgroundImage = `url(${familyPhoto.src})`;
+const familyDisplayImg = document.getElementById('family-display-img');
+if (familyPhoto && familyDisplayImg) {
+  familyDisplayImg.src = familyPhoto.src;
 }
 </script>
 </body>
